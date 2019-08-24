@@ -13,6 +13,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const isProduction = process.env.NODE_ENV || 'production';
 
+app.get('/', (req, res) => {
+	res.status(200).json({ message: 'welcome to grabber' });
+});
+
 app.use('/api/user', user);
 app.use('/api/deal', deal);
 app.use('/api/auth', auth);
