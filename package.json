@@ -1,0 +1,39 @@
+{
+	"name": "grabber",
+	"version": "1.0.0",
+	"description": "This is a deal grabber application for Nortify",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js",
+		"debug": "node --inspeck-brk server.js",
+		"start:dev": "nodemon server.js",
+		"db:migrate": "sequelize db:migrate",
+		"db:undo:migrate": "sequelize db:migrate:undo:all",
+		"db:roll:migrate": "npm run db:undo:migrate && npm run db:migrate && npm run db:seed",
+		"db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path database/seeders"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Oliver-ke/grabber.git"
+	},
+	"keywords": [ "deal", "nortify", "school", "grabber" ],
+	"author": "azorji kelechi oliver",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Oliver-ke/grabber/issues"
+	},
+	"homepage": "https://github.com/Oliver-ke/grabber#readme",
+	"dependencies": {
+		"bcrypt": "^3.0.6",
+		"cors": "^2.8.5",
+		"dotenv": "^8.1.0",
+		"express": "^4.17.1",
+		"express-validator": "^6.1.1",
+		"jsonwebtoken": "^8.5.1",
+		"pg": "^7.12.1",
+		"pg-hstore": "^2.3.3",
+		"sequelize": "^5.15.1",
+		"sequelize-cli": "^5.5.0"
+	}
+}
