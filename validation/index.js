@@ -1,11 +1,12 @@
-const { userRegister, userLogin, addDeal, updateDeal } = require('./rules');
+const { userRegister, userLogin, addDeal, updateDeal, requestDiscount } = require('./rules');
 
 const getValidator = validationName => {
 	const rules = {
 		userRegister,
 		userLogin,
 		addDeal,
-		updateDeal
+		updateDeal,
+		requestDiscount
 	};
 
 	return rules[validationName];

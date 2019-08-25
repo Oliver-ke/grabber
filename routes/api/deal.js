@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createDeal, getDeals, deleteDeal, updateDeal } = require('../../controllers/dealController');
+const { createDeal, getDeals, deleteDeal, updateDeal, requestDiscount } = require('../../controllers/dealController');
 const { isTokenValid, validate } = require('../../middlewares');
 
 /*
@@ -15,6 +15,13 @@ router.post('/', isTokenValid, validate('addDeal'), createDeal);
 	security: public, everyone can access
 */
 router.get('/', getDeals);
+
+/*
+	Description: Request discount
+	Route: GET '/api/deal/discount?studentMax=&studentMin='
+	security: public, everyone can access
+*/
+router.get('/discount', validate('requestDiscount'), requestDiscount);
 
 /*
 	Description: Update a deal

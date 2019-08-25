@@ -1,4 +1,7 @@
 const { Deal } = require('../database/models');
+const sequelize = require('sequelize');
+const { generateRandom } = require('../utils');
+const { lte, gte } = sequelize.Op;
 
 const createDeal = async (req, res) => {
 	const { price, discount, minRange, maxRange, disabled } = req.body;
@@ -14,7 +17,8 @@ const createDeal = async (req, res) => {
 
 const getDeals = async (req, res) => {
 	const deals = await Deal.findAndCountAll({
-		order: [['createdAt', 'DESC']]
+		order: [['createdAt', 'DESC']],
+		where: { disabled: false }
 	});
 	const resData = {
 		deals: deals.rows,
@@ -53,7 +57,7 @@ const updateDeal = async (req, res) => {
 
 const deleteDeal = async (req, res) => {
 	const { id } = req.params;
-	const deal = Deal.findOne({ where: { id } });
+	const deal = await Deal.findOne({ where: { id } });
 	await deal.update({ disable: true });
 
 	return res.status(200).json({
@@ -62,4 +66,37 @@ const deleteDeal = async (req, res) => {
 	});
 };
 
-module.exports = { createDeal, getDeals, deleteDeal, updateDeal };
+const requestDiscount = async (req, res) => {
+	const { studentMax } = req.query;
+	const deal = await Deal.findOne({
+		where: {
+			disabled: false,
+			minRange: {
+				[lte]: parseInt(studentMax)
+			},
+			maxRange: {
+				[gte]: parseInt(studentMax)
+			}
+		}
+	});
+
+	if (deal) {
+		const actualDiscount = deal.dataValues.discount;
+		const givenDiscount = generateRandom(actualDiscount / 2, actualDiscount);
+		// make filter
+		const { discount, ...filtered } = deal.dataValues;
+		const resData = { ...filtered, discount: givenDiscount };
+		return res.status(200).json({
+			status: 200,
+			data: resData
+		});
+	}
+	return res.status(404).json({ status: 404, message: 'No discount for the given range' });
+};
+module.exports = {
+	createDeal,
+	getDeals,
+	deleteDeal,
+	updateDeal,
+	requestDiscount
+};

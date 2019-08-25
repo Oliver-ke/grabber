@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { check, query } = require('express-validator');
 
 // add validation rules here.
 const userRegister = [
@@ -75,9 +75,17 @@ const updateDeal = [
 		.isEmpty()
 ];
 
+const requestDiscount = [
+	query('studentMax', 'Provide a studentMax parameter as a number')
+		.isNumeric()
+		.not()
+		.isEmpty()
+];
+
 module.exports = {
 	userLogin,
 	userRegister,
 	addDeal,
-	updateDeal
+	updateDeal,
+	requestDiscount
 };

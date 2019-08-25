@@ -1,4 +1,4 @@
-const generateToken = require('../utils/generateToken');
+const { generateToken } = require('../utils');
 const { User, Deal } = require('../database/models');
 
 const createTokenPayload = user => {
