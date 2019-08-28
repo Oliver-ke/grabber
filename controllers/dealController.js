@@ -93,10 +93,36 @@ const requestDiscount = async (req, res) => {
 	}
 	return res.status(404).json({ status: 404, message: 'No discount for the given range' });
 };
+
+const getCategoryDeals = async (req, res) => {
+	const { category } = req.query;
+	try {
+		const deals = await Deal.findAll({
+			where: { category }
+		});
+		if (deals) {
+			return res.status(200).json({
+				status: 200,
+				data: deals.filter(deal => deal.disabled !== true)
+			});
+		}
+	} catch (error) {
+		console.log(error.message);
+		return res.status(404).json({
+			status: 404,
+			message: `Category ${category} does not exist`
+		});
+	}
+	return res.status(404).json({
+		status: 404,
+		message: 'No deal for the given category'
+	});
+};
 module.exports = {
 	createDeal,
 	getDeals,
 	deleteDeal,
 	updateDeal,
-	requestDiscount
+	requestDiscount,
+	getCategoryDeals
 };

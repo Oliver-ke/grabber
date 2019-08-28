@@ -22,6 +22,14 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			type: DataTypes.INTEGER
 		},
+		category: {
+			allowNull: false,
+			type: DataTypes.ENUM(['schoolAccounting', 'gradeCoverage', 'enterprise'])
+		},
+		fixed: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
+		},
 		disabled: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false

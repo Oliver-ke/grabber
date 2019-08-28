@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { createDeal, getDeals, deleteDeal, updateDeal, requestDiscount } = require('../../controllers/dealController');
-const { isTokenValid, validate } = require('../../middlewares');
+const { isTokenValid, validate, checkQuery } = require('../../middlewares');
 
 /*
 	Description: Add a new deal
@@ -10,18 +10,11 @@ const { isTokenValid, validate } = require('../../middlewares');
 router.post('/', isTokenValid, validate('addDeal'), createDeal);
 
 /*
-	Description: Get all deals
+	Description: Get all deals, also with query
 	Route: GET '/api/deal'
 	security: public, everyone can access
 */
-router.get('/', getDeals);
-
-/*
-	Description: Request discount
-	Route: GET '/api/deal/discount?studentMax=&studentMin='
-	security: public, everyone can access
-*/
-router.get('/discount', validate('requestDiscount'), requestDiscount);
+router.get('/', checkQuery, getDeals);
 
 /*
 	Description: Update a deal

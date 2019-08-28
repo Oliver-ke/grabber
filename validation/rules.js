@@ -44,6 +44,11 @@ const addDeal = [
 		.optional()
 		.isBoolean()
 		.not()
+		.isEmpty(),
+	check('fixed', 'fixed should either be true or false')
+		.optional()
+		.isBoolean()
+		.not()
 		.isEmpty()
 ];
 
@@ -69,6 +74,11 @@ const updateDeal = [
 		.not()
 		.isEmpty(),
 	check('disabled', 'disabled should either be true or false')
+		.optional()
+		.isBoolean()
+		.not()
+		.isEmpty(),
+	check('fixed', 'fixed should either be true or false')
 		.optional()
 		.isBoolean()
 		.not()

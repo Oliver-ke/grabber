@@ -23,7 +23,15 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false
 			},
+			category: {
+				type: Sequelize.ENUM(['schoolAccounting', 'gradeCoverage', 'enterprise']),
+				allowNull: false
+			},
 			disabled: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
+			fixed: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false
 			},
