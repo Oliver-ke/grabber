@@ -22,7 +22,7 @@ const loginUser = async (req, res) => {
 	}
 	return res.status(401).json({
 		status: 401,
-		error: 'Incorrect email or password',
+		errors: 'Incorrect email or password',
 	});
 };
 

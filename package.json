@@ -8,6 +8,8 @@
 		"start": "node server.js",
 		"debug": "node --inspeck-brk server.js",
 		"start:dev": "nodemon server.js",
+		"client": "cd ../grabber-frontend && npm start",
+		"dev": "concurrently \"npm run start:dev\" \"npm run client\"",
 		"db:migrate": "sequelize db:migrate",
 		"db:undo:migrate": "sequelize db:migrate:undo:all",
 		"db:roll:migrate": "npm run db:undo:migrate && npm run db:migrate && npm run db:seed",
@@ -35,5 +37,8 @@
 		"pg-hstore": "^2.3.3",
 		"sequelize": "^5.15.1",
 		"sequelize-cli": "^5.5.0"
+	},
+	"devDependencies": {
+		"concurrently": "^4.1.2"
 	}
 }

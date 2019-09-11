@@ -4,15 +4,31 @@ const { generateRandom } = require('../utils');
 const { lte, gte } = sequelize.Op;
 
 const createDeal = async (req, res) => {
-	const { price, discount, minRange, maxRange, disabled } = req.body;
+	const { price, discount, minRange, maxRange, category, disabled, fixed } = req.body;
 	const { id: createdBy } = req.decoded;
-	const deal = await Deal.create({ price, discount, minRange, maxRange, createdBy, disabled: disabled || false });
-
-	return res.status(201).json({
-		status: 201,
-		message: 'Deal created',
-		data: deal
-	});
+	try {
+		const deal = await Deal.create({
+			price,
+			discount,
+			minRange,
+			maxRange,
+			createdBy,
+			fixed: fixed || false,
+			disabled: disabled || false,
+			category
+		});
+		return res.status(201).json({
+			status: 201,
+			message: 'Deal created',
+			data: deal
+		});
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			status: 500,
+			message: 'Error creating deal, please ensure valid input'
+		});
+	}
 };
 
 const getDeals = async (req, res) => {
@@ -32,7 +48,7 @@ const getDeals = async (req, res) => {
 
 const updateDeal = async (req, res) => {
 	const { id } = req.params;
-	const { price, discount, minRange, maxRange, disabled } = req.body;
+	const { price, discount, minRange, maxRange, disabled, category, fixed } = req.body;
 
 	const deal = await Deal.findOne({ where: { id } });
 	if (deal) {
@@ -41,7 +57,9 @@ const updateDeal = async (req, res) => {
 			discount: discount || deal.dataValues.discount,
 			minRange: minRange || deal.dataValues.minRange,
 			maxRange: maxRange || deal.dataValues.maxRange,
-			disabled: disabled || deal.dataValues.disabled
+			disabled: disabled || deal.dataValues.disabled,
+			category: category || deal.dataValues.category,
+			fixed: fixed
 		});
 		return res.status(201).json({
 			status: 201,
@@ -57,9 +75,7 @@ const updateDeal = async (req, res) => {
 
 const deleteDeal = async (req, res) => {
 	const { id } = req.params;
-	const deal = await Deal.findOne({ where: { id } });
-	await deal.update({ disable: true });
-
+	await Deal.destroy({ where: { id } });
 	return res.status(200).json({
 		status: 200,
 		message: 'Deal deleted successfully'

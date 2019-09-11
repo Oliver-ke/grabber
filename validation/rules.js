@@ -40,6 +40,10 @@ const addDeal = [
 		.isNumeric()
 		.not()
 		.isEmpty(),
+	check('category', 'Please include a category')
+		.isAlpha()
+		.not()
+		.isEmpty(),
 	check('disabled', 'disabled should either be true or false')
 		.optional()
 		.isBoolean()
