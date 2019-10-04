@@ -1,47 +1,45 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('Deals', {
+		return queryInterface.createTable('LockedDeals', {
 			id: {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.STRING,
 				defaultValue: Sequelize.UUIDV4
 			},
-			price: {
-				type: Sequelize.FLOAT,
-				allowNull: false
-			},
-			discount: {
-				type: Sequelize.FLOAT,
-				allowNull: false
-			},
-			implementationCost: {
-				allowNull: false,
-				type: Sequelize.FLOAT
-			},
-			implementationDiscount: {
-				allowNull: false,
-				type: Sequelize.FLOAT
-			},
-			minRange: {
-				type: Sequelize.INTEGER,
-				allowNull: false
-			},
-			maxRange: {
-				type: Sequelize.INTEGER,
-				allowNull: false
-			},
-			category: {
-				type: Sequelize.ENUM(['schoolAccounting', 'gradeCoverage', 'enterprise']),
-				allowNull: false
-			},
-			fixed: {
-				type: Sequelize.BOOLEAN,
-				defaultValue: false
-			},
-			createdBy: {
+			email: {
 				type: Sequelize.STRING,
 				allowNull: false
+			},
+			phone: {
+				type: Sequelize.STRING,
+				allowNull: false
+			},
+			school: {
+				type: Sequelize.STRING,
+				allowNull: false
+			},
+			totalPrice: {
+				type: Sequelize.INTEGER,
+				allowNull: false
+			},
+			lockOfferPrice: {
+				type: Sequelize.INTEGER,
+				allowNull: false
+			},
+			paymentMethod: {
+				type: Sequelize.ENUM(['online', 'offline']),
+				allowNull: false
+			},
+			dealId: {
+				type: Sequelize.STRING,
+				allowNull: true,
+				references: {
+					model: 'Deals',
+					key: 'id'
+				},
+				onUpdate: 'CASCADE',
+				onDelete: 'SET NULL'
 			},
 			createdAt: {
 				allowNull: false,
@@ -54,6 +52,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('Deals');
+		return queryInterface.dropTable('LockedDeals');
 	}
 };

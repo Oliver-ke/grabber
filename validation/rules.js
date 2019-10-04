@@ -1,4 +1,4 @@
-const { check, query } = require('express-validator');
+const { check, body, query } = require('express-validator');
 
 // add validation rules here.
 const userRegister = [
@@ -24,32 +24,40 @@ const userLogin = [
 ];
 
 const addDeal = [
-	check('price', 'Price should be a number')
+	body('price', 'Price should be a number')
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('discount', 'Dicount should be a number')
+	body('discount', 'Dicount should be a number')
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('minRange', 'minRange should be a none empty number')
+	body('implementationCost', 'implementationCost should be a number')
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('maxRange', 'maxRange should be a none empty number')
+	body('implementationDiscount', 'implementationDiscount should be a number')
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('category', 'Please include a category')
+	body('minRange', 'minRange should be a none empty number')
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	body('maxRange', 'maxRange should be a none empty number')
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	body('category', 'Please include a category')
 		.isAlpha()
 		.not()
 		.isEmpty(),
-	check('disabled', 'disabled should either be true or false')
+	body('disabled', 'disabled should either be true or false')
 		.optional()
 		.isBoolean()
 		.not()
 		.isEmpty(),
-	check('fixed', 'fixed should either be true or false')
+	body('fixed', 'fixed should either be true or false')
 		.optional()
 		.isBoolean()
 		.not()
@@ -57,32 +65,37 @@ const addDeal = [
 ];
 
 const updateDeal = [
-	check('price', 'Price should be a number')
+	body('price', 'Price should be a number')
 		.optional()
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('discount', 'Dicount should be a number')
+	body('discount', 'Dicount should be a number')
 		.optional()
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('minRange', 'minRange should be a none empty number')
+	body('implementationCost', 'implementationCost should be a number')
 		.optional()
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('maxRange', 'maxRange should be a none empty number')
+	body('implementationDiscount', 'implementationDiscount should be a number')
 		.optional()
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('disabled', 'disabled should either be true or false')
+	body('minRange', 'minRange should be a none empty number')
 		.optional()
-		.isBoolean()
+		.isNumeric()
 		.not()
 		.isEmpty(),
-	check('fixed', 'fixed should either be true or false')
+	body('maxRange', 'maxRange should be a none empty number')
+		.optional()
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	body('fixed', 'fixed should either be true or false')
 		.optional()
 		.isBoolean()
 		.not()
@@ -93,7 +106,52 @@ const requestDiscount = [
 	query('studentMax', 'Provide a studentMax parameter as a number')
 		.isNumeric()
 		.not()
+		.isEmpty(),
+	query('studentMin', 'Provide a studentMin')
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	query('category', 'Provide a category')
+		.isAlpha()
+		.not()
 		.isEmpty()
+];
+
+const getCategoryDeals = [
+	query('category', 'provide a category')
+		.isAlpha()
+		.not()
+		.isEmpty()
+];
+
+const addLockDeal = [
+	body('email', 'please provide a valid email')
+		.trim()
+		.isEmail()
+		.not()
+		.isEmpty(),
+	body('school', 'please provide a valid school name')
+		.trim()
+		.not()
+		.isEmpty(),
+	body('totalPrice', 'please provide a totalPrice')
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	body('lockOfferPrice', 'please provide an lockOfferPrice')
+		.isNumeric()
+		.not()
+		.isEmpty(),
+	body('paymentMethod', 'please provide a paymentMethod')
+		.not()
+		.isEmpty(),
+	body('dealId', 'please a dealId')
+		.trim()
+		.not()
+		.isEmpty(),
+	body('phone', 'please provide a valid  phone number')
+		.trim()
+		.isLength({ min: 11, max: 13 })
 ];
 
 module.exports = {
@@ -101,5 +159,7 @@ module.exports = {
 	userRegister,
 	addDeal,
 	updateDeal,
-	requestDiscount
+	requestDiscount,
+	getCategoryDeals,
+	addLockDeal
 };

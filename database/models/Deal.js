@@ -14,6 +14,14 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			type: DataTypes.FLOAT
 		},
+		implementationCost: {
+			allowNull: false,
+			type: DataTypes.FLOAT
+		},
+		implementationDiscount: {
+			allowNull: false,
+			type: DataTypes.FLOAT
+		},
 		minRange: {
 			allowNull: false,
 			type: DataTypes.INTEGER
@@ -30,10 +38,6 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
-		disabled: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false
-		},
 		createdBy: {
 			allowNull: false,
 			type: DataTypes.STRING
@@ -42,6 +46,9 @@ module.exports = (sequelize, DataTypes) => {
 	Deal.associate = models => {
 		Deal.belongsTo(models.User, {
 			foreignKey: 'createdBy'
+		});
+		Deal.hasMany(models.LockedDeal, {
+			foreignKey: 'dealId'
 		});
 	};
 	return Deal;

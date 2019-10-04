@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { auth, deal, user } = require('./routes/index');
+const { auth, deal, user, lockDeal } = require('./routes/index');
 const { sequelize } = require('./database/models');
 dotenv.config();
 const app = express();
@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/api/user', user);
 app.use('/api/deal', deal);
 app.use('/api/auth', auth);
+app.use('/api/lockDeal', lockDeal);
 
 // development error handler
 // will print stacktrace

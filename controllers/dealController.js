@@ -1,20 +1,30 @@
 const { Deal } = require('../database/models');
 const sequelize = require('sequelize');
 const { generateRandom } = require('../utils');
-const { lte, gte } = sequelize.Op;
+const { eq } = sequelize.Op;
 
 const createDeal = async (req, res) => {
-	const { price, discount, minRange, maxRange, category, disabled, fixed } = req.body;
+	const {
+		price,
+		discount,
+		implementationCost,
+		implementationDiscount,
+		minRange,
+		maxRange,
+		category,
+		fixed
+	} = req.body;
 	const { id: createdBy } = req.decoded;
 	try {
 		const deal = await Deal.create({
 			price,
 			discount,
+			implementationCost,
+			implementationDiscount,
 			minRange,
 			maxRange,
 			createdBy,
 			fixed: fixed || false,
-			disabled: disabled || false,
 			category
 		});
 		return res.status(201).json({
@@ -33,8 +43,7 @@ const createDeal = async (req, res) => {
 
 const getDeals = async (req, res) => {
 	const deals = await Deal.findAndCountAll({
-		order: [['createdAt', 'DESC']],
-		where: { disabled: false }
+		order: [['createdAt', 'DESC']]
 	});
 	const resData = {
 		deals: deals.rows,
@@ -48,7 +57,16 @@ const getDeals = async (req, res) => {
 
 const updateDeal = async (req, res) => {
 	const { id } = req.params;
-	const { price, discount, minRange, maxRange, disabled, category, fixed } = req.body;
+	const {
+		price,
+		discount,
+		minRange,
+		maxRange,
+		category,
+		fixed,
+		implementationCost: impCost,
+		implementationDiscount: impDiscount
+	} = req.body;
 
 	const deal = await Deal.findOne({ where: { id } });
 	if (deal) {
@@ -57,8 +75,9 @@ const updateDeal = async (req, res) => {
 			discount: discount || deal.dataValues.discount,
 			minRange: minRange || deal.dataValues.minRange,
 			maxRange: maxRange || deal.dataValues.maxRange,
-			disabled: disabled || deal.dataValues.disabled,
 			category: category || deal.dataValues.category,
+			implementationCost: impCost || deal.dataValues.implementationCost,
+			implementationDiscount: impDiscount || deal.dataValues.implementationDiscount,
 			fixed: fixed
 		});
 		return res.status(201).json({
@@ -83,25 +102,27 @@ const deleteDeal = async (req, res) => {
 };
 
 const requestDiscount = async (req, res) => {
-	const { studentMax } = req.query;
+	const { studentMax, studentMin, category } = req.query;
 	const deal = await Deal.findOne({
 		where: {
-			disabled: false,
+			category: category,
 			minRange: {
-				[lte]: parseInt(studentMax)
+				[eq]: parseInt(studentMin)
 			},
 			maxRange: {
-				[gte]: parseInt(studentMax)
+				[eq]: parseInt(studentMax)
 			}
 		}
 	});
 
 	if (deal) {
-		const actualDiscount = deal.dataValues.discount;
-		const givenDiscount = generateRandom(actualDiscount / 2, actualDiscount);
-		// make filter
-		const { discount, ...filtered } = deal.dataValues;
-		const resData = { ...filtered, discount: givenDiscount };
+		const { discount: realDiscount, fixed, implementationDiscount: impDiscount, ...filtered } = deal.dataValues;
+
+		const givenDiscount = fixed ? realDiscount : generateRandom(realDiscount / 2, realDiscount);
+
+		const givenImpDiscount = fixed ? impDiscount : generateRandom(impDiscount / 2, impDiscount);
+
+		const resData = { ...filtered, discount: givenDiscount, fixed, implementationDiscount: givenImpDiscount };
 		return res.status(200).json({
 			status: 200,
 			data: resData
@@ -119,7 +140,7 @@ const getCategoryDeals = async (req, res) => {
 		if (deals) {
 			return res.status(200).json({
 				status: 200,
-				data: deals.filter(deal => deal.disabled !== true)
+				data: deals
 			});
 		}
 	} catch (error) {

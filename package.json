@@ -19,7 +19,12 @@
 		"type": "git",
 		"url": "git+https://github.com/Oliver-ke/grabber.git"
 	},
-	"keywords": [ "deal", "nortify", "school", "grabber" ],
+	"keywords": [
+		"deal",
+		"nortify",
+		"school",
+		"grabber"
+	],
 	"author": "azorji kelechi oliver",
 	"license": "MIT",
 	"bugs": {
@@ -27,6 +32,8 @@
 	},
 	"homepage": "https://github.com/Oliver-ke/grabber#readme",
 	"dependencies": {
+		"@sendgrid/mail": "^6.4.0",
+		"axios": "^0.19.0",
 		"bcrypt": "^3.0.6",
 		"cors": "^2.8.5",
 		"dotenv": "^8.1.0",

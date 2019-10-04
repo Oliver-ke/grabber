@@ -1,4 +1,12 @@
-const { userRegister, userLogin, addDeal, updateDeal, requestDiscount } = require('./rules');
+const {
+	userRegister,
+	userLogin,
+	addDeal,
+	updateDeal,
+	requestDiscount,
+	getCategoryDeals,
+	addLockDeal
+} = require('./rules');
 
 const getValidator = validationName => {
 	const rules = {
@@ -6,7 +14,9 @@ const getValidator = validationName => {
 		userLogin,
 		addDeal,
 		updateDeal,
-		requestDiscount
+		requestDiscount,
+		getCategoryDeals,
+		addLockDeal
 	};
 
 	return rules[validationName];
