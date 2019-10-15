@@ -27,9 +27,21 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false
 			},
+			paid: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
 			paymentMethod: {
 				type: Sequelize.ENUM(['online', 'offline']),
 				allowNull: false
+			},
+			expired: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
+			expiresAt: {
+				allowNull: true,
+				type: Sequelize.DATE
 			},
 			dealId: {
 				type: Sequelize.STRING,

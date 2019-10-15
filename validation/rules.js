@@ -48,8 +48,7 @@ const addDeal = [
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	body('category', 'Please include a category')
-		.isAlpha()
+	body('categoryId', 'Please include a categoryId')
 		.not()
 		.isEmpty(),
 	body('disabled', 'disabled should either be true or false')
@@ -85,6 +84,10 @@ const updateDeal = [
 		.isNumeric()
 		.not()
 		.isEmpty(),
+	body('categoryId', 'Please include a categoryId')
+		.optional()
+		.not()
+		.isEmpty(),
 	body('minRange', 'minRange should be a none empty number')
 		.optional()
 		.isNumeric()
@@ -111,15 +114,14 @@ const requestDiscount = [
 		.isNumeric()
 		.not()
 		.isEmpty(),
-	query('category', 'Provide a category')
-		.isAlpha()
+	query('categoryId', 'Provide a categoryId')
 		.not()
 		.isEmpty()
 ];
 
 const getCategoryDeals = [
-	query('category', 'provide a category')
-		.isAlpha()
+	query('categoryId', 'provide a categoryId')
+		.isAlphanumeric()
 		.not()
 		.isEmpty()
 ];
@@ -142,6 +144,11 @@ const addLockDeal = [
 		.isNumeric()
 		.not()
 		.isEmpty(),
+	body('paid', 'please provide a valid paid value')
+		.optional()
+		.isBoolean()
+		.not()
+		.isEmpty(),
 	body('paymentMethod', 'please provide a paymentMethod')
 		.not()
 		.isEmpty(),
@@ -154,6 +161,31 @@ const addLockDeal = [
 		.isLength({ min: 11, max: 13 })
 ];
 
+const addCategory = [
+	body('name', 'provide a name')
+		.isString()
+		.not()
+		.isEmpty(),
+	body('features', 'provide features of category')
+		.optional()
+		.isString()
+		.not()
+		.isEmpty()
+];
+
+const updateCategory = [
+	body('name', 'provide a name')
+		.optional()
+		.isString()
+		.not()
+		.isEmpty(),
+	body('features', 'provide features of category')
+		.optional()
+		.isString()
+		.not()
+		.isEmpty()
+];
+
 module.exports = {
 	userLogin,
 	userRegister,
@@ -161,5 +193,7 @@ module.exports = {
 	updateDeal,
 	requestDiscount,
 	getCategoryDeals,
-	addLockDeal
+	addLockDeal,
+	addCategory,
+	updateCategory
 };

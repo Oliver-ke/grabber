@@ -1,7 +1,15 @@
-const { Deal } = require('../database/models');
+const { Deal, Category } = require('../database/models');
 const sequelize = require('sequelize');
 const { generateRandom } = require('../utils');
 const { eq } = sequelize.Op;
+
+const association = [
+	{
+		model: Category,
+		as: 'dealCategory',
+		attributes: ['id', 'name', 'features']
+	}
+];
 
 const createDeal = async (req, res) => {
 	const {
@@ -11,11 +19,15 @@ const createDeal = async (req, res) => {
 		implementationDiscount,
 		minRange,
 		maxRange,
-		category,
+		categoryId,
 		fixed
 	} = req.body;
 	const { id: createdBy } = req.decoded;
 	try {
+		const category = await Category.findByPk(categoryId);
+		if (!category) {
+			return res.status(404).json({ status: 404, message: 'No category with the given categoryId' });
+		}
 		const deal = await Deal.create({
 			price,
 			discount,
@@ -25,7 +37,7 @@ const createDeal = async (req, res) => {
 			maxRange,
 			createdBy,
 			fixed: fixed || false,
-			category
+			categoryId
 		});
 		return res.status(201).json({
 			status: 201,
@@ -43,7 +55,8 @@ const createDeal = async (req, res) => {
 
 const getDeals = async (req, res) => {
 	const deals = await Deal.findAndCountAll({
-		order: [['createdAt', 'DESC']]
+		order: [['createdAt', 'DESC']],
+		include: association
 	});
 	const resData = {
 		deals: deals.rows,
@@ -62,7 +75,7 @@ const updateDeal = async (req, res) => {
 		discount,
 		minRange,
 		maxRange,
-		category,
+		categoryId,
 		fixed,
 		implementationCost: impCost,
 		implementationDiscount: impDiscount
@@ -75,7 +88,7 @@ const updateDeal = async (req, res) => {
 			discount: discount || deal.dataValues.discount,
 			minRange: minRange || deal.dataValues.minRange,
 			maxRange: maxRange || deal.dataValues.maxRange,
-			category: category || deal.dataValues.category,
+			categoryId: categoryId || deal.dataValues.categoryId,
 			implementationCost: impCost || deal.dataValues.implementationCost,
 			implementationDiscount: impDiscount || deal.dataValues.implementationDiscount,
 			fixed: fixed
@@ -102,10 +115,10 @@ const deleteDeal = async (req, res) => {
 };
 
 const requestDiscount = async (req, res) => {
-	const { studentMax, studentMin, category } = req.query;
+	const { studentMax, studentMin, categoryId } = req.query;
 	const deal = await Deal.findOne({
 		where: {
-			category: category,
+			categoryId: categoryId,
 			minRange: {
 				[eq]: parseInt(studentMin)
 			},
@@ -132,10 +145,11 @@ const requestDiscount = async (req, res) => {
 };
 
 const getCategoryDeals = async (req, res) => {
-	const { category } = req.query;
+	const { categoryId } = req.query;
 	try {
 		const deals = await Deal.findAll({
-			where: { category }
+			where: { categoryId },
+			include: association
 		});
 		if (deals) {
 			return res.status(200).json({
@@ -147,12 +161,12 @@ const getCategoryDeals = async (req, res) => {
 		console.log(error.message);
 		return res.status(404).json({
 			status: 404,
-			message: `Category ${category} does not exist`
+			message: `Category ${categoryId} does not exist`
 		});
 	}
 	return res.status(404).json({
 		status: 404,
-		message: 'No deal for the given category'
+		message: 'No deal for the given categoryId'
 	});
 };
 module.exports = {

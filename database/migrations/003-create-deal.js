@@ -31,9 +31,15 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false
 			},
-			category: {
-				type: Sequelize.ENUM(['schoolAccounting', 'gradeCoverage', 'enterprise']),
-				allowNull: false
+			categoryId: {
+				type: Sequelize.STRING,
+				allowNull: true,
+				references: {
+					model: 'Categories',
+					key: 'id'
+				},
+				onUpdate: 'CASCADE',
+				onDelete: 'SET NULL'
 			},
 			fixed: {
 				type: Sequelize.BOOLEAN,

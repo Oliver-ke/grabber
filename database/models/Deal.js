@@ -30,9 +30,9 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			type: DataTypes.INTEGER
 		},
-		category: {
+		categoryId: {
 			allowNull: false,
-			type: DataTypes.ENUM(['schoolAccounting', 'gradeCoverage', 'enterprise'])
+			type: DataTypes.STRING
 		},
 		fixed: {
 			type: DataTypes.BOOLEAN,
@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
 	Deal.associate = models => {
 		Deal.belongsTo(models.User, {
 			foreignKey: 'createdBy'
+		});
+		Deal.belongsTo(models.Category, {
+			foreignKey: 'categoryId',
+			as: 'dealCategory'
 		});
 		Deal.hasMany(models.LockedDeal, {
 			foreignKey: 'dealId'

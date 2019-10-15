@@ -18,7 +18,7 @@ const mail = async msgContent => {
 		const res = await sgMail.send(msg);
 		return { error: null, result: res };
 	} catch (error) {
-		console.log(error.response.body.errors);
+		console.log(error);
 		return { error: error.message, result: null };
 	}
 };

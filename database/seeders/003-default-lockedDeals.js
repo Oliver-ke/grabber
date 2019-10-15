@@ -8,7 +8,10 @@ module.exports = {
 				school: 'Holy cross international',
 				totalPrice: 340000,
 				lockOfferPrice: 32000,
+				paid: false,
 				paymentMethod: 'online',
+				expired: true,
+				expiresAt: '2019-06-08 009:10:38.181+01',
 				dealId: '22221',
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'
@@ -19,8 +22,9 @@ module.exports = {
 				phone: '08101967324',
 				school: 'Oscars school of science',
 				totalPrice: 560000,
+				paid: true,
 				lockOfferPrice: 3000,
-				paymentMethod: 'online',
+				paymentMethod: 'offline',
 				dealId: '22222',
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'

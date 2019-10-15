@@ -11,7 +11,7 @@ module.exports = {
 				implementationDiscount: 30,
 				createdBy: 11111,
 				fixed: false,
-				category: 'enterprise',
+				categoryId: 44442,
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'
 			},
@@ -24,7 +24,7 @@ module.exports = {
 				implementationCost: 4000,
 				implementationDiscount: 20,
 				createdBy: 11111,
-				category: 'schoolAccounting',
+				categoryId: 44441,
 				fixed: true,
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'

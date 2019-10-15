@@ -1,5 +1,11 @@
 const router = require('express').Router();
-const { addLockDeal, getLockDeals, verifyPayment } = require('../../controllers/lockDealController');
+const {
+	addLockDeal,
+	getLockDeals,
+	verifyPayment,
+	updateLockDeal,
+	deleteLockDeal
+} = require('../../controllers/lockDealController');
 const { isTokenValid, validate } = require('../../middlewares/index');
 
 /*
@@ -22,5 +28,19 @@ router.get('/:reference', verifyPayment);
 	security: private, only for admin
 */
 router.get('/', isTokenValid, getLockDeals);
+
+/*
+	Description: UPDATE A locked deal
+	Route: PUT '/api/lockDeal'
+	security: private, only for admin
+*/
+router.put('/:id', isTokenValid, updateLockDeal);
+
+/*
+	Description: Delete a locked deal
+	Route: DELETE '/api/lockDeal'
+	security: private, only for admin
+*/
+router.delete('/:id', isTokenValid, deleteLockDeal);
 
 module.exports = router;

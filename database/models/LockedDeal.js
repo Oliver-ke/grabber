@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		email: {
 			allowNull: false,
+			unique: true,
 			type: DataTypes.STRING
 		},
 		phone: {
@@ -26,9 +27,21 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			type: DataTypes.INTEGER
 		},
+		paid: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
+		},
 		paymentMethod: {
 			allowNull: false,
 			type: DataTypes.ENUM(['online', 'offline'])
+		},
+		expired: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
+		},
+		expiresAt: {
+			allowNull: true,
+			type: DataTypes.DATE
 		},
 		dealId: {
 			allowNull: true,
