@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const { auth, deal, user, lockDeal, category } = require('./routes');
 const { sequelize } = require('./database/models');
 dotenv.config();
@@ -24,14 +25,11 @@ app.use('/api/category', category);
 app.use('/api/lockDeal', lockDeal);
 
 // Server static assets if in production
-if (process.env.NODE_ENV === 'production') {
-	// Set static folder
-	app.use(express.static('client/build'));
-
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-	});
-}
+// Set static folder
+app.use(express.static('client/build'));
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 // development error handler
 // will print stacktrace
