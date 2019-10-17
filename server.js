@@ -13,15 +13,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const isProduction = process.env.NODE_ENV || 'production';
 
-app.get('/', (req, res) => {
-	res.status(200).json({ message: 'welcome to grabber' });
-});
+// app.get('/', (req, res) => {
+// 	res.status(200).json({ message: 'welcome to grabber' });
+// });
 
 app.use('/api/user', user);
 app.use('/api/deal', deal);
 app.use('/api/auth', auth);
 app.use('/api/category', category);
 app.use('/api/lockDeal', lockDeal);
+
+// Server static assets if in production
+if (process.env.NODE_ENV === 'production') {
+	// Set static folder
+	app.use(express.static('client/build'));
+
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	});
+}
 
 // development error handler
 // will print stacktrace

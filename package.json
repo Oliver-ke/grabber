@@ -13,18 +13,14 @@
 		"db:migrate": "sequelize db:migrate",
 		"db:undo:migrate": "sequelize db:migrate:undo:all",
 		"db:roll:migrate": "npm run db:undo:migrate && npm run db:migrate && npm run db:seed",
-		"db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path database/seeders"
+		"db:seed": "node_modules/.bin/sequelize db:seed:all $* --seeders-path database/seeders",
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/Oliver-ke/grabber.git"
 	},
-	"keywords": [
-		"deal",
-		"nortify",
-		"school",
-		"grabber"
-	],
+	"keywords": [ "deal", "nortify", "school", "grabber" ],
 	"author": "azorji kelechi oliver",
 	"license": "MIT",
 	"bugs": {

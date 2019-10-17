@@ -39,10 +39,16 @@ const createDeal = async (req, res) => {
 			fixed: fixed || false,
 			categoryId
 		});
+		const dealCategory = {
+			name: category.dataValues.name,
+			features: category.dataValues.features,
+			id: category.dataValues.id
+		};
+		const resData = { ...deal.dataValues, dealCategory };
 		return res.status(201).json({
 			status: 201,
 			message: 'Deal created',
-			data: deal
+			data: resData
 		});
 	} catch (err) {
 		console.log(err);
