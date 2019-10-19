@@ -1,63 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import CardWithSelect from '../common/CardWithSelect';
 import { connect } from 'react-redux';
 import { setSelection } from '../../actions/userDiscount';
+import { getCategories } from '../../actions/category';
 import { Icon } from 'antd';
 
-const Categories = ({ setSelection, selection }) => {
+const Categories = ({ setSelection, selection, stateCategory, getCategories }) => {
 	const [ checkedItem, setCheckedItem ] = useState('');
+	const { categories } = stateCategory;
 
 	const isChecked = (id, value) => {
-		//fire store
 		setCheckedItem(id);
 		setSelection(value);
+	};
+	const makeFeatures = (features) => {
+		return features.split(',').map((value, index) => (
+			<p key={index}>
+				<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> {value}
+			</p>
+		));
 	};
 	useEffect(
 		() => {
 			if (selection.category) {
 				setCheckedItem(selection.category.id);
 			}
+			getCategories();
 		},
-		[ selection.category ]
+		[ getCategories, selection.category ]
 	);
 	return (
 		<div className="item-container">
-			<CardWithSelect
-				isChecked={isChecked}
-				id={1}
-				checked={checkedItem === 1 ? true : false}
-				content={{ name: 'category', value: 'Nortify Enterprise', alias: 'enterprise' }}
-			>
-				<p>
-					<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> All Features
-				</p>
-			</CardWithSelect>
-			<CardWithSelect
-				isChecked={isChecked}
-				checked={checkedItem === 2 ? true : false}
-				id={2}
-				content={{ name: 'category', value: 'Nortify Accounting', alias: 'schoolAccounting' }}
-			>
-				<p>
-					<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> Human Resource Mgt (HRM)
-				</p>
-			</CardWithSelect>
-			<CardWithSelect
-				isChecked={isChecked}
-				checked={checkedItem === 3 ? true : false}
-				id={3}
-				content={{ name: 'category', value: 'Nortify Grade Converge', alias: 'gradeCoverage' }}
-			>
-				<p>
-					<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> Academic Records
-				</p>
-			</CardWithSelect>
+			{categories.map((category) => (
+				<CardWithSelect
+					key={category.id}
+					isChecked={isChecked}
+					id={category.id}
+					checked={checkedItem === category.id ? true : false}
+					content={{ name: 'category', value: `${category.name}` }}
+				>
+					{makeFeatures(category.features)}
+				</CardWithSelect>
+			))}
 		</div>
 	);
 };
 
 const mapStateToProps = (state) => ({
-	selection: state.userDiscount.usersSelection
+	selection: state.userDiscount.usersSelection,
+	stateCategory: state.category
 });
 
-export default connect(mapStateToProps, { setSelection })(Categories);
+export default connect(mapStateToProps, { setSelection, getCategories })(Categories);

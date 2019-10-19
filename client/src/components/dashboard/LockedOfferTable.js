@@ -1,10 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Divider, Tag } from 'antd';
 import CustomCard from '../common/Card';
-import { getAllLockedOffers } from '../../actions/userDiscount';
+import { getAllLockedOffers, deleteLockedOffer, setEditData } from '../../actions/lockedOffers';
+import EditOfferContainer from './EditLockedOffer';
 import { connect } from 'react-redux';
 
-const OfferTable = ({ userDiscount, getAllLockedOffers }) => {
+const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, setEditData }) => {
+	const [ showModal, setShowModal ] = useState(false);
+
+	const handleEdit = (data) => {
+		setEditData(data);
+		setShowModal(true);
+	};
+
+	const onModalClose = () => {
+		setShowModal(false);
+	};
 	const columns = [
 		{
 			title: 'Email',
@@ -54,10 +65,31 @@ const OfferTable = ({ userDiscount, getAllLockedOffers }) => {
 					</span>
 				);
 			}
+		},
+		{
+			title: 'Paid',
+			dataIndex: 'paid',
+			key: 'paid',
+			render: (value) => {
+				return <span>{value ? <Tag color="blue">Yes</Tag> : <Tag color="#351328">No</Tag>}</span>;
+			}
+		},
+		{
+			title: 'Action',
+			key: 'action',
+			render: (text, record) => (
+				<span>
+					<a onClick={() => handleEdit(record)} href="#!">
+						Edit Payment Status
+					</a>
+					<Divider type="vertical" />
+					<a onClick={() => deleteLockedOffer(record.id)} href="#!" style={{ color: 'red' }}>
+						Delete
+					</a>
+				</span>
+			)
 		}
 	];
-
-	// consider implementing view discount detail with a modal that show the discount detail of the users offer
 
 	useEffect(
 		() => {
@@ -65,34 +97,33 @@ const OfferTable = ({ userDiscount, getAllLockedOffers }) => {
 		},
 		[ getAllLockedOffers ]
 	);
-	const { lockedOffers, loading } = userDiscount;
-	let { lockDeals } = lockedOffers;
-	if (lockDeals) {
-		// add key and sort
-		lockDeals = lockDeals
-			.map((offer) => {
-				const { id, ...rest } = offer;
-				return {
-					...rest,
-					key: id,
-					id
-				};
-			})
-			.sort((a, b) => {
-				return new Date(b.createdAt) - new Date(a.createdAt);
-			});
-	}
+
+	const { lockedOffers, loading } = stateLockOffer;
+	let arrangedOffers = lockedOffers
+		.map((offer) => {
+			const { id, ...rest } = offer;
+			return {
+				...rest,
+				key: id,
+				id
+			};
+		})
+		.sort((a, b) => {
+			return new Date(b.createdAt) - new Date(a.createdAt);
+		});
+
 	return (
 		<div>
 			<CustomCard>
-				<Table loading={loading} bordered columns={columns} dataSource={lockDeals} />
+				<EditOfferContainer showModal={showModal} modalClosed={onModalClose} />
+				<Table loading={loading} bordered columns={columns} dataSource={arrangedOffers} />
 			</CustomCard>
 		</div>
 	);
 };
 
 const mapStateToProps = (state) => ({
-	userDiscount: state.userDiscount
+	stateLockOffer: state.lockedOffer
 });
 
-export default connect(mapStateToProps, { getAllLockedOffers })(OfferTable);
+export default connect(mapStateToProps, { getAllLockedOffers, deleteLockedOffer, setEditData })(OfferTable);

@@ -23,7 +23,7 @@ const Range = ({ setSelection, selection, discounts }) => {
 	const { category } = selection;
 
 	//const filteredDiscounts = getRanges();
-	const filteredDiscounts = discounts.filter((discount) => discount.category === category.alias);
+	const filteredDiscounts = discounts.filter((discount) => discount.categoryId === category.id);
 
 	return filteredDiscounts.map((item) => (
 		<CardWithSelect

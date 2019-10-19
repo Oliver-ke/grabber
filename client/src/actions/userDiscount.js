@@ -6,18 +6,16 @@ import {
 	GET_ERRORS,
 	SAVE_USER_DISCOUNT,
 	SET_TOTAL_LOCK_PRICE,
-	GET_LOCKED_OFFERS,
 	CONFIRM_PAYMENT
 } from './types';
 
-//window.location.href = `${authorization_url}`;
 export const getUserDiscount = (selectionDetail) => async (dispatch) => {
 	// make request
 	dispatch(setLoading());
 	const { range, category } = selectionDetail;
 	const minRange = range.value[0];
 	const maxRange = range.value[1];
-	const uri = `/api/deal/request?studentMax=${maxRange}&studentMin=${minRange}&category=${category.alias}`;
+	const uri = `/api/deal/request?studentMax=${maxRange}&studentMin=${minRange}&categoryId=${category.id}`;
 	try {
 		const res = await axios.get(uri);
 		const { data } = res;
@@ -41,18 +39,6 @@ export const saveUserDiscount = (details) => async (dispatch) => {
 		dispatch({ type: SAVE_USER_DISCOUNT, payload: data });
 	} catch (error) {
 		console.log(error.response.data);
-		dispatch({ type: GET_ERRORS, payload: error.message });
-	}
-};
-
-export const getAllLockedOffers = () => async (dispatch) => {
-	dispatch(setLoading());
-	try {
-		const res = await axios.get('/api/lockDeal');
-		const { data } = res.data;
-		dispatch({ type: GET_LOCKED_OFFERS, payload: data });
-	} catch (error) {
-		console.log(error);
 		dispatch({ type: GET_ERRORS, payload: error.message });
 	}
 };

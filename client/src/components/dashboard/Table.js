@@ -69,16 +69,10 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 			dataIndex: 'dealCategory',
 			render: (cat) => {
 				let color = 'yellow';
-				if (cat === 'school Accounting') {
-					color = 'volcano';
+				if (!cat) {
+					color = '#ccc';
 				}
-				if (cat === 'grade Coverage') {
-					color = 'geekblue';
-				}
-				if (cat === 'enterprise') {
-					color = 'green';
-				}
-				const name = cat ? cat.name : 'Deleted';
+				const name = cat ? cat.name : 'None';
 				return (
 					<span>
 						<Tag color={color}>{name.toUpperCase()}</Tag>
