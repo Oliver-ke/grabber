@@ -2,6 +2,14 @@ const moment = require('moment');
 const { LockedDeal: LockDeal, Deal } = require('../database/models');
 const { sendMail, payment: { initPayment, confirmPayment } } = require('../utils');
 
+const association = [
+	{
+		model: Deal,
+		as: 'dealLocked',
+		attributes: [ 'id', 'code', 'expiryDate' ]
+	}
+];
+
 const addLockDeal = async (req, res) => {
 	const { email, phone, school, dealId, lockOfferPrice, paymentMethod, totalPrice } = req.body;
 	try {
@@ -79,7 +87,8 @@ const verifyPayment = async (req, res) => {
 const getLockDeals = async (req, res) => {
 	try {
 		const lockDeals = await LockDeal.findAndCountAll({
-			order: [['createdAt', 'DESC']]
+			order: [ [ 'createdAt', 'DESC' ] ],
+			include: association
 		});
 		const resData = {
 			lockDeals: lockDeals.rows,

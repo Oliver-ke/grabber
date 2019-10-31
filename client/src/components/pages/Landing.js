@@ -3,9 +3,10 @@ import { Row, Col } from 'antd';
 import NavBar from '../common/Navbar';
 import Hero from '../common/Hero';
 import DiscountContainer from '../discount/DiscountContainer';
+import './landing.css';
 const Landing = () => {
 	return (
-		<Row>
+		<Row className="wrapper">
 			<Col sm={24}>
 				<NavBar />
 			</Col>
@@ -16,7 +17,7 @@ const Landing = () => {
 					</div>
 				</div>
 			</Col>
-			<Col md={12} sm={24}>
+			<Col className="main-container" md={12} sm={24}>
 				<DiscountContainer />
 			</Col>
 		</Row>

@@ -57,14 +57,14 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 			) : (
 				<Fragment>
 					<h4>Termly Subscription</h4>
-					<PriceItem tag="Official Price:" amount={`₦${packageDiscount.actualAmount}`} />
-					<PriceItem tag="New Price:" amount={`₦${packageDiscount.paymentPrice}`} />
+					<PriceItem stricked={true} tag="Official Price:" amount={`₦${packageDiscount.actualAmount}`} />
+					<PriceItem tag="Discounted Price:" amount={`₦${packageDiscount.paymentPrice}`} />
 					<PriceItem tag="Amount Saved:" amount={`₦${packageDiscount.discountPrice}`} />
 					<hr />
 					<h4>Implementation Assistance (setup, training, customization)</h4>
-					<PriceItem tag="One Time Setup Fee:" amount={`₦${impDiscount.actualAmount}`} />
-					<PriceItem tag="Setup Discount:" amount={`₦${impDiscount.discountPrice}`} />
-					<PriceItem tag="Setup Payment:" amount={`₦${impDiscount.paymentPrice}`} />
+					<PriceItem stricked={true} tag="Official Setup Price:" amount={`₦${impDiscount.actualAmount}`} />
+					<PriceItem tag="Discounted Setup Price:" amount={`₦${impDiscount.paymentPrice}`} />
+					<PriceItem tag="Setup Amount Saved:" amount={`₦${impDiscount.discountPrice}`} />
 					<hr />
 					<h4>Total Amount = Termly Subscription + Implementation Assistance</h4>
 					<PriceItem tag="Total Amount:" amount={`₦${totalLockValue.totalPrice}`} />

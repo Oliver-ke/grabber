@@ -108,7 +108,7 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 						)}
 						{current === steps.length - 1 && (
 							<Button size="large" block type="primary" onClick={lockOfferBtnClick}>
-								Lock Offer
+								Grab Offer
 							</Button>
 						)}
 					</div>

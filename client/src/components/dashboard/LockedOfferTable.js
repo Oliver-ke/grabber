@@ -18,6 +18,17 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 	};
 	const columns = [
 		{
+			title: 'S/N',
+			dataIndex: 'index',
+			key: 'index'
+		},
+		{
+			title: 'Date',
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			render: (value) => new Date(value).toLocaleDateString()
+		},
+		{
 			title: 'Email',
 			dataIndex: 'email',
 			key: 'email',
@@ -34,6 +45,12 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 			dataIndex: 'school',
 			key: 'school',
 			render: (text) => <a href="#!">{text}</a>
+		},
+		{
+			title: 'Code',
+			dataIndex: 'code',
+			key: 'code',
+			render: (value) => <span style={{ color: 'blue' }}>{`${value}`}</span>
 		},
 		{
 			title: 'Total Price',
@@ -80,7 +97,7 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 			render: (text, record) => (
 				<span>
 					<a onClick={() => handleEdit(record)} href="#!">
-						Edit Payment Status
+						Edit
 					</a>
 					<Divider type="vertical" />
 					<a onClick={() => deleteLockedOffer(record.id)} href="#!" style={{ color: 'red' }}>
@@ -100,11 +117,14 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 
 	const { lockedOffers, loading } = stateLockOffer;
 	let arrangedOffers = lockedOffers
-		.map((offer) => {
+		.map((offer, index) => {
 			const { id, ...rest } = offer;
+			const { dealLocked: { code } } = rest;
 			return {
 				...rest,
 				key: id,
+				code,
+				index: index + 1,
 				id
 			};
 		})

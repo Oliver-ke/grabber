@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardWithSelect from '../common/CardWithSelect';
 import { connect } from 'react-redux';
 import { setSelection } from '../../actions/userDiscount';
@@ -13,13 +13,13 @@ const Categories = ({ setSelection, selection, stateCategory, getCategories }) =
 		setCheckedItem(id);
 		setSelection(value);
 	};
-	const makeFeatures = (features) => {
-		return features.split(',').map((value, index) => (
-			<p key={index}>
-				<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> {value}
-			</p>
-		));
-	};
+	// const makeFeatures = (features) => {
+	// 	return features.split(',').map((value, index) => (
+	// 		<p key={index}>
+	// 			<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> {value}
+	// 		</p>
+	// 	));
+	// };
 	useEffect(
 		() => {
 			if (selection.category) {
@@ -39,7 +39,9 @@ const Categories = ({ setSelection, selection, stateCategory, getCategories }) =
 					checked={checkedItem === category.id ? true : false}
 					content={{ name: 'category', value: `${category.name}` }}
 				>
-					{makeFeatures(category.features)}
+					<p>
+						<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> {category.features}
+					</p>
 				</CardWithSelect>
 			))}
 		</div>

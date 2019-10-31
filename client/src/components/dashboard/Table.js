@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag, Input } from 'antd';
 import CustomCard from '../common/Card';
 import EditModal from './EditDiscount';
 import { getDiscount, deleteDiscount, editData } from '../../actions/discount';
 import { connect } from 'react-redux';
 
+const { Search } = Input;
 const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 	const [ showModal, setShowModal ] = useState(false);
-
 	const handleEdit = (data) => {
 		editData(data);
 		setShowModal(true);
@@ -16,6 +16,23 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 		setShowModal(false);
 	};
 	const columns = [
+		{
+			title: 'S/N',
+			dataIndex: 'index',
+			key: 'index'
+		},
+		{
+			title: 'Date',
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			render: (value) => new Date(value).toLocaleDateString()
+		},
+		{
+			title: 'Code',
+			dataIndex: 'code',
+			key: 'code',
+			render: (value) => <span style={{ color: 'blue' }}>{`${value}`}</span>
+		},
 		{
 			title: 'Price',
 			dataIndex: 'price',
@@ -100,17 +117,19 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 		() => {
 			getDiscount();
 		},
+		// eslint disable-next-line
 		[ getDiscount ]
 	);
-	let { discounts, loading } = discount;
+	let { loading, discounts } = discount;
 	if (discounts) {
 		// add key and sort
 		discounts = discounts
-			.map((deal) => {
+			.map((deal, index) => {
 				const { id, ...rest } = deal;
 				return {
 					...rest,
 					key: id,
+					index: index + 1,
 					id
 				};
 			})
@@ -118,9 +137,21 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 				return new Date(b.createdAt) - new Date(a.createdAt);
 			});
 	}
+	const searchDiscount = (searchText) => {
+		let matches = discounts.filter((dt) => {
+			const regex = new RegExp(`^${searchText}`, 'gi');
+			return dt.dealCategory.name.match(regex) || dt.code.match(regex);
+		});
+		discounts = matches;
+	};
 	return (
 		<div>
 			<CustomCard>
+				<Search
+					placeholder="input search text"
+					onSearch={(value) => searchDiscount(value)}
+					style={{ width: 200, marginBottom: '10px' }}
+				/>
 				<EditModal showModal={showModal} modalClosed={onModalClose} />
 				<Table loading={loading} bordered columns={columns} dataSource={discounts} />
 			</CustomCard>

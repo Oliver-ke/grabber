@@ -1,5 +1,5 @@
 module.exports = {
-	up: queryInterface =>
+	up: (queryInterface) =>
 		queryInterface.bulkInsert('Deals', [
 			{
 				id: 22221,
@@ -11,6 +11,8 @@ module.exports = {
 				implementationDiscount: 30,
 				createdBy: 11111,
 				fixed: false,
+				code: '112019',
+				expiryDate: '2019-11-08 009:10:38.181+01',
 				categoryId: 44442,
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'
@@ -26,9 +28,11 @@ module.exports = {
 				createdBy: 11111,
 				categoryId: 44441,
 				fixed: true,
+				code: '102019',
+				expiryDate: '2019-10-08 009:10:38.181+01',
 				createdAt: '2019-06-08 009:10:38.181+01',
 				updatedAt: '2019-06-08 009:10:38.181+01'
 			}
 		]),
-	down: queryInterface => queryInterface.bulkDelete('Deals', null, {})
+	down: (queryInterface) => queryInterface.bulkDelete('Deals', null, {})
 };

@@ -4,10 +4,6 @@ p {
 	color: #626262;
 }
 
-/* body {
-	overflow: hidden;
-} */
-
 .nav {
 	background: #24a44d;
 	height: 3rem;
@@ -114,11 +110,6 @@ h1.hero-text {
 	padding-left: 2rem;
 	padding-right: 2rem;
 }
-
-/* .right-side {
-	height: 100%;
-	overflow-x: auto;
-} */
 
 p.lead {
 	color: #ccc;
@@ -286,4 +277,28 @@ div.caption {
 	.item-container .ant-card-body {
 		padding: 5px;
 	}
+}
+
+/* for cross effect */
+.cross {
+	position: relative;
+	display: inline-block;
+}
+.cross::before,
+.cross::after {
+	content: '';
+	width: 100%;
+	position: absolute;
+	right: 0;
+	top: 50%;
+}
+.cross::before {
+	border-bottom: 2px solid red;
+	-webkit-transform: skewY(-10deg);
+	transform: skewY(-10deg);
+}
+.cross::after {
+	border-bottom: 2px solid red;
+	-webkit-transform: skewY(10deg);
+	transform: skewY(10deg);
 }

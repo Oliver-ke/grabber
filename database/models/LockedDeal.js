@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		paymentMethod: {
 			allowNull: false,
-			type: DataTypes.ENUM(['online', 'offline'])
+			type: DataTypes.ENUM([ 'online', 'offline' ])
 		},
 		expired: {
 			type: DataTypes.BOOLEAN,
@@ -48,9 +48,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING
 		}
 	});
-	LockedDeal.associate = models => {
+	LockedDeal.associate = (models) => {
 		LockedDeal.belongsTo(models.Deal, {
-			foreignKey: 'dealId'
+			foreignKey: 'dealId',
+			as: 'dealLocked'
 		});
 	};
 	return LockedDeal;

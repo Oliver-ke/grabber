@@ -38,12 +38,20 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
+		expiryDate: {
+			type: DataTypes.DATE,
+			allowNull: false
+		},
+		code: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
 		createdBy: {
 			allowNull: false,
 			type: DataTypes.STRING
 		}
 	});
-	Deal.associate = models => {
+	Deal.associate = (models) => {
 		Deal.belongsTo(models.User, {
 			foreignKey: 'createdBy'
 		});
@@ -52,7 +60,10 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'dealCategory'
 		});
 		Deal.hasMany(models.LockedDeal, {
-			foreignKey: 'dealId'
+			foreignKey: 'dealId',
+			as: 'dealLocked',
+			onDelete: 'cascade',
+			hooks: true
 		});
 	};
 	return Deal;

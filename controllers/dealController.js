@@ -7,7 +7,7 @@ const association = [
 	{
 		model: Category,
 		as: 'dealCategory',
-		attributes: ['id', 'name', 'features']
+		attributes: [ 'id', 'name', 'features' ]
 	}
 ];
 
@@ -20,7 +20,9 @@ const createDeal = async (req, res) => {
 		minRange,
 		maxRange,
 		categoryId,
-		fixed
+		fixed,
+		code,
+		expiryDate
 	} = req.body;
 	const { id: createdBy } = req.decoded;
 	try {
@@ -37,7 +39,9 @@ const createDeal = async (req, res) => {
 			maxRange,
 			createdBy,
 			fixed: fixed || false,
-			categoryId
+			categoryId,
+			expiryDate,
+			code
 		});
 		const dealCategory = {
 			name: category.dataValues.name,
@@ -61,7 +65,7 @@ const createDeal = async (req, res) => {
 
 const getDeals = async (req, res) => {
 	const deals = await Deal.findAndCountAll({
-		order: [['createdAt', 'DESC']],
+		order: [ [ 'createdAt', 'DESC' ] ],
 		include: association
 	});
 	const resData = {
