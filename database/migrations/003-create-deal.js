@@ -5,69 +5,69 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.STRING,
-				defaultValue: Sequelize.UUIDV4
+				defaultValue: Sequelize.UUIDV4,
 			},
 			price: {
 				type: Sequelize.FLOAT,
-				allowNull: false
+				allowNull: false,
 			},
 			discount: {
 				type: Sequelize.FLOAT,
-				allowNull: false
+				allowNull: false,
 			},
 			implementationCost: {
 				allowNull: false,
-				type: Sequelize.FLOAT
+				type: Sequelize.FLOAT,
 			},
 			implementationDiscount: {
 				allowNull: false,
-				type: Sequelize.FLOAT
+				type: Sequelize.FLOAT,
 			},
 			minRange: {
 				type: Sequelize.INTEGER,
-				allowNull: false
+				allowNull: false,
 			},
 			maxRange: {
 				type: Sequelize.INTEGER,
-				allowNull: false
+				allowNull: false,
 			},
 			categoryId: {
 				type: Sequelize.STRING,
 				allowNull: true,
 				references: {
 					model: 'Categories',
-					key: 'id'
+					key: 'id',
 				},
 				onUpdate: 'CASCADE',
-				onDelete: 'SET NULL'
+				onDelete: 'SET NULL',
 			},
 			fixed: {
 				type: Sequelize.BOOLEAN,
-				defaultValue: false
+				defaultValue: false,
 			},
 			expiryDate: {
 				type: Sequelize.DATE,
-				allowNull: false
+				allowNull: true,
 			},
 			code: {
 				type: Sequelize.STRING,
-				allowNull: false
+				allowNull: false,
 			},
 			createdBy: {
 				type: Sequelize.STRING,
-				allowNull: false
+				allowNull: false,
 			},
 			createdAt: {
 				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
 			},
 			updatedAt: {
 				allowNull: false,
-				type: Sequelize.DATE
-			}
+				type: Sequelize.DATE,
+			},
 		});
 	},
 	down: (queryInterface, Sequelize) => {
 		return queryInterface.dropTable('Deals');
-	}
+	},
 };

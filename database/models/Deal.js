@@ -4,66 +4,66 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			primaryKey: true,
 			type: DataTypes.STRING,
-			defaultValue: DataTypes.UUIDV4
+			defaultValue: DataTypes.UUIDV4,
 		},
 		price: {
 			allowNull: false,
-			type: DataTypes.FLOAT
+			type: DataTypes.FLOAT,
 		},
 		discount: {
 			allowNull: false,
-			type: DataTypes.FLOAT
+			type: DataTypes.FLOAT,
 		},
 		implementationCost: {
 			allowNull: false,
-			type: DataTypes.FLOAT
+			type: DataTypes.FLOAT,
 		},
 		implementationDiscount: {
 			allowNull: false,
-			type: DataTypes.FLOAT
+			type: DataTypes.FLOAT,
 		},
 		minRange: {
 			allowNull: false,
-			type: DataTypes.INTEGER
+			type: DataTypes.INTEGER,
 		},
 		maxRange: {
 			allowNull: false,
-			type: DataTypes.INTEGER
+			type: DataTypes.INTEGER,
 		},
 		categoryId: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.STRING,
 		},
 		fixed: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: false
+			defaultValue: false,
 		},
 		expiryDate: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: true,
 		},
 		code: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		createdBy: {
 			allowNull: false,
-			type: DataTypes.STRING
-		}
+			type: DataTypes.STRING,
+		},
 	});
 	Deal.associate = (models) => {
 		Deal.belongsTo(models.User, {
-			foreignKey: 'createdBy'
+			foreignKey: 'createdBy',
 		});
 		Deal.belongsTo(models.Category, {
 			foreignKey: 'categoryId',
-			as: 'dealCategory'
+			as: 'dealCategory',
 		});
 		Deal.hasMany(models.LockedDeal, {
 			foreignKey: 'dealId',
 			as: 'dealLocked',
 			onDelete: 'cascade',
-			hooks: true
+			hooks: true,
 		});
 	};
 	return Deal;

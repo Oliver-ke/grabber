@@ -8,7 +8,7 @@
 		"start": "node server.js",
 		"debug": "node --inspeck-brk server.js",
 		"start:dev": "nodemon server.js",
-		"client": "cd ../grabber-frontend && npm start",
+		"client": "cd ./client && npm start",
 		"dev": "concurrently \"npm run start:dev\" \"npm run client\"",
 		"db:migrate": "sequelize db:migrate",
 		"db:undo:migrate": "sequelize db:migrate:undo:all",
