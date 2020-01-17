@@ -8,7 +8,7 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 	const [ packageDiscount, setPackageDiscount ] = useState({});
 	const [ impDiscount, setImpDiscount ] = useState({});
 	const [ totalLockValue, setTotalLockValue ] = useState({});
-	const { loading, discountDetail } = discount;
+	const { loading, discountDetail, usersSelection: { range } } = discount;
 	const { discount: userDiscount, price, implementationCost, implementationDiscount } = discountDetail;
 
 	const calculateDiscount = (actualAmount, discountPercent) => {
@@ -17,7 +17,7 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 			actualAmount,
 			discountPercent,
 			discountPrice,
-			paymentPrice: actualAmount - discountPrice
+			paymentPrice: actualAmount - discountPrice,
 		};
 	};
 
@@ -26,7 +26,7 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 		const lockOfferPrice = Math.floor(30 / 100 * totalPrice);
 		return {
 			totalPrice,
-			lockOfferPrice
+			lockOfferPrice,
 		};
 	};
 
@@ -47,7 +47,7 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 			};
 		},
 		// eslint-disable-next-line
-		[ discount.discountDetail ]
+		[ discount.discountDetail ],
 	);
 
 	return (
@@ -56,19 +56,19 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 				<Spin className="spinner" />
 			) : (
 				<Fragment>
-					<h4>Termly Subscription</h4>
+					<h4>Termly Subscription ({`${range.value[0]} - ${range.value[1]} Students`})  </h4>
 					<PriceItem stricked={true} tag="Official Price:" amount={`₦${packageDiscount.actualAmount}`} />
 					<PriceItem tag="Discounted Price:" amount={`₦${packageDiscount.paymentPrice}`} />
 					<PriceItem tag="Amount Saved:" amount={`₦${packageDiscount.discountPrice}`} />
 					<hr />
-					<h4>Implementation Assistance (setup, training, customization)</h4>
+					<h4>Implementation Assistance (setup, training, customization, portal hosting, activation )</h4>
 					<PriceItem stricked={true} tag="Official Setup Price:" amount={`₦${impDiscount.actualAmount}`} />
 					<PriceItem tag="Discounted Setup Price:" amount={`₦${impDiscount.paymentPrice}`} />
 					<PriceItem tag="Setup Amount Saved:" amount={`₦${impDiscount.discountPrice}`} />
 					<hr />
-					<h4>Total Amount = Termly Subscription + Implementation Assistance</h4>
-					<PriceItem tag="Total Amount:" amount={`₦${totalLockValue.totalPrice}`} />
-					<PriceItem tag="Secure Discount with:" amount={`₦${totalLockValue.lockOfferPrice}`} />
+					<h4>Total Discounted Amount = Termly Subscription + Implementation Assistance</h4>
+					<PriceItem tag="Total Discounted Amount:" amount={`₦${totalLockValue.totalPrice}`} />
+					<PriceItem tag="Grab this discount with just:" amount={`₦${totalLockValue.lockOfferPrice}`} />
 					<h5>TC: Offer last for 45 days</h5>
 				</Fragment>
 			)}
@@ -77,6 +77,6 @@ const Discount = ({ discount, setTotalLockPrice }) => {
 };
 
 const mapStateToProps = (state) => ({
-	discount: state.userDiscount
+	discount: state.userDiscount,
 });
 export default connect(mapStateToProps, { setTotalLockPrice })(Discount);

@@ -16,18 +16,18 @@ const steps = [
 	{
 		title: 'Select package',
 		content: <Category />,
-		parentTitle: 'Select a Suitable Package'
+		parentTitle: 'Select a Suitable Package',
 	},
 	{
 		title: 'Choose Range',
 		content: <Range />,
-		parentTitle: 'Select Your Range of Students'
+		parentTitle: 'Select Your Range of Students',
 	},
 	{
-		title: 'Discount',
+		title: 'Grab Discount',
 		content: <Discount />,
-		parentTitle: 'Your Discount'
-	}
+		parentTitle: 'Your Discount',
+	},
 ];
 
 const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSelection }) => {
@@ -39,7 +39,7 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 		() => {
 			getDiscount();
 		},
-		[ getDiscount ]
+		[ getDiscount ],
 	);
 	const next = () => {
 		const newCurrent = current + 1;
@@ -85,7 +85,7 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 		<div className="r-side-card">
 			<LockDiscountModal showModal={showLockModal} modalClosed={onModalClose} />
 			<div>
-				<h2 className="card-header-text">Nortify Discounts</h2>
+				<h2 className="card-header-text">Nortify Discount Grabber</h2>
 			</div>
 			{!savedDiscount.saved ? (
 				<Fragment>
@@ -121,6 +121,6 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 };
 
 const mapStateToProps = (state) => ({
-	userDiscount: state.userDiscount
+	userDiscount: state.userDiscount,
 });
 export default connect(mapStateToProps, { getDiscount, getUserDiscount, setSelection })(DiscountContainer);
