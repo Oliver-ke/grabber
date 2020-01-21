@@ -41,7 +41,11 @@ module.exports = {
 				onUpdate: 'CASCADE',
 				onDelete: 'SET NULL',
 			},
-			fixed: {
+			discountFixed: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false,
+			},
+			implementationFixed: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false,
 			},

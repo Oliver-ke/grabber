@@ -13,7 +13,7 @@ const userRegister = [
 	check('password', 'password should be at least 6 characters').isLength({ min: 6 }),
 ];
 
-const userLogin = [ check('email', 'Invalid email, please provide a valid mail').isEmail().not().isEmpty() ];
+const userLogin = [check('email', 'Invalid email, please provide a valid mail').isEmail().not().isEmpty()];
 
 const addDeal = [
 	body('price', 'Price should be a number').isNumeric().not().isEmpty(),
@@ -24,9 +24,11 @@ const addDeal = [
 	body('maxRange', 'maxRange should be a none empty number').isNumeric().not().isEmpty(),
 	body('categoryId', 'Please include a categoryId').not().isEmpty(),
 	body('disabled', 'disabled should either be true or false').optional().isBoolean().not().isEmpty(),
-	body('fixed', 'fixed should either be true or false').optional().isBoolean().not().isEmpty(),
+	body('discountFixed', 'discountFixed should either be true or false').optional().isBoolean().not().isEmpty(),
+	body('implementationFixed', 'implementationFixed should either be true or false').optional().isBoolean().not().isEmpty(),
 	body('expiryDate', 'provide expiryDate').optional().isString().not().isEmpty(),
 ];
+
 
 const updateDeal = [
 	body('price', 'Price should be a number').optional().isNumeric().not().isEmpty(),
@@ -45,7 +47,7 @@ const requestDiscount = [
 	query('categoryId', 'Provide a categoryId').not().isEmpty(),
 ];
 
-const getCategoryDeals = [ query('categoryId', 'provide a categoryId').isAlphanumeric().not().isEmpty() ];
+const getCategoryDeals = [query('categoryId', 'provide a categoryId').isAlphanumeric().not().isEmpty()];
 
 const addLockDeal = [
 	body('email', 'please provide a valid email').trim().isEmail().not().isEmpty(),

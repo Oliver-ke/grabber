@@ -15,7 +15,7 @@ const EditForm = ({ updateDiscount, getCategories, closeModal, cancel, discount,
 		() => {
 			getCategories();
 		},
-		[ getCategories ]
+		[getCategories]
 	);
 
 	const {
@@ -24,13 +24,14 @@ const EditForm = ({ updateDiscount, getCategories, closeModal, cancel, discount,
 		maxRange,
 		minRange,
 		categoryId,
-		fixed,
+		discountFixed,
+		implementationFixed,
 		id,
 		implementationCost,
 		implementationDiscount,
 		dealCategory
 	} = editData;
-	const [ formInputs, setFormInputs ] = useState({
+	const [formInputs, setFormInputs] = useState({
 		price,
 		discount: editDiscount,
 		implementationDiscount,
@@ -38,10 +39,11 @@ const EditForm = ({ updateDiscount, getCategories, closeModal, cancel, discount,
 		maxRange,
 		minRange,
 		categoryId,
-		fixed,
+		discountFixed,
+		implementationFixed,
 		id
 	});
-	const [ error, setError ] = useState('');
+	const [error, setError] = useState('');
 	const handleInput = (e) => {
 		const { value, name } = e.target;
 		setFormInputs({
@@ -145,16 +147,19 @@ const EditForm = ({ updateDiscount, getCategories, closeModal, cancel, discount,
 					{categoryLoading ? (
 						<Option value="something">Loading..</Option>
 					) : (
-						categories.map((item) => (
-							<Option key={item.id} value={item.id}>
-								{item.name}
-							</Option>
-						))
-					)}
+							categories.map((item) => (
+								<Option key={item.id} value={item.id}>
+									{item.name}
+								</Option>
+							))
+						)}
 				</Select>
 			</Form.Item>
-			<Form.Item label="Fixed">
-				<Switch checked={formInputs.fixed} onChange={(e) => setFormInputs({ ...formInputs, fixed: e })} />
+			<Form.Item label="Fixed Discount">
+				<Switch checked={formInputs.discountFixed} onChange={(e) => setFormInputs({ ...formInputs, discountFixed: e })} />
+			</Form.Item>
+			<Form.Item label="Fixed Implementation">
+				<Switch checked={formInputs.implementationFixed} onChange={(e) => setFormInputs({ ...formInputs, implementationFixed: e })} />
 			</Form.Item>
 			<hr />
 			<div style={{ textAlign: 'right' }}>

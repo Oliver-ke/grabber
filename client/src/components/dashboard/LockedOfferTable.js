@@ -6,7 +6,7 @@ import EditOfferContainer from './EditLockedOffer';
 import { connect } from 'react-redux';
 
 const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, setEditData }) => {
-	const [ showModal, setShowModal ] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 
 	const handleEdit = (data) => {
 		setEditData(data);
@@ -50,7 +50,12 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 			title: 'Code',
 			dataIndex: 'code',
 			key: 'code',
-			render: (value) => <span style={{ color: 'blue' }}>{`${value}`}</span>
+			render: (value) => {
+				if (value === 'removed') {
+					return <span style={{ color: 'red' }}>{`${value}`}</span>
+				}
+				return <span style={{ color: 'blue' }}>{`${value}`}</span>
+			}
 		},
 		{
 			title: 'Total Price',
@@ -112,14 +117,16 @@ const OfferTable = ({ stateLockOffer, getAllLockedOffers, deleteLockedOffer, set
 		() => {
 			getAllLockedOffers();
 		},
-		[ getAllLockedOffers ]
+		[getAllLockedOffers]
 	);
 
 	const { lockedOffers, loading } = stateLockOffer;
 	let arrangedOffers = lockedOffers
 		.map((offer, index) => {
+			console.log(offer)
 			const { id, ...rest } = offer;
-			const { dealLocked: { code } } = rest;
+			const { dealLocked } = rest;
+			const code = dealLocked && dealLocked.code ? dealLocked.code : 'removed'
 			return {
 				...rest,
 				key: id,

@@ -10,7 +10,7 @@ const { Group: InputGroup } = Input;
 const AddDiscountForm = ({ addDiscount, getCategories, closeModal, cancel, discount, stateCategory }) => {
 	const { loading } = discount;
 	const { categories, loading: categoryLoading } = stateCategory;
-	const [ formInputs, setFormInputs ] = useState({
+	const [formInputs, setFormInputs] = useState({
 		price: '',
 		discount: '',
 		implementationCost: '',
@@ -18,15 +18,16 @@ const AddDiscountForm = ({ addDiscount, getCategories, closeModal, cancel, disco
 		maxRange: '',
 		minRange: '',
 		categoryId: '',
-		fixed: false
+		discountFixed: false,
+		implementationFixed: false
 	});
-	const [ error, setError ] = useState('');
+	const [error, setError] = useState('');
 
 	useEffect(
 		() => {
 			getCategories();
 		},
-		[ getCategories ]
+		[getCategories]
 	);
 
 	const handleInput = (e) => {
@@ -38,7 +39,6 @@ const AddDiscountForm = ({ addDiscount, getCategories, closeModal, cancel, disco
 	};
 	const formSubmit = (e) => {
 		e.preventDefault();
-		console.log(formInputs);
 		const { price, discount, maxRange, minRange, categoryId } = formInputs;
 		if (!price || !discount || !maxRange || !minRange || !categoryId) {
 			return setError('Please fill all available fields');
@@ -134,16 +134,19 @@ const AddDiscountForm = ({ addDiscount, getCategories, closeModal, cancel, disco
 					{categoryLoading ? (
 						<Option value="something">Loading..</Option>
 					) : (
-						categories.map((item) => (
-							<Option key={item.id} value={item.id}>
-								{item.name}
-							</Option>
-						))
-					)}
+							categories.map((item) => (
+								<Option key={item.id} value={item.id}>
+									{item.name}
+								</Option>
+							))
+						)}
 				</Select>
 			</Form.Item>
-			<Form.Item label="Fixed">
-				<Switch onChange={(e) => setFormInputs({ ...formInputs, fixed: e })} />
+			<Form.Item label="Fixed Discount">
+				<Switch onChange={(e) => setFormInputs({ ...formInputs, discountFixed: e })} />
+			</Form.Item>
+			<Form.Item label="Fixed Implementation">
+				<Switch onChange={(e) => setFormInputs({ ...formInputs, implementationFixed: e })} />
 			</Form.Item>
 			<hr />
 			<div style={{ textAlign: 'right' }}>

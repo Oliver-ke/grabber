@@ -7,7 +7,7 @@ const association = [
 	{
 		model: Category,
 		as: 'dealCategory',
-		attributes: [ 'id', 'name', 'features' ],
+		attributes: ['id', 'name', 'features'],
 	},
 ];
 
@@ -20,7 +20,8 @@ const createDeal = async (req, res) => {
 		minRange,
 		maxRange,
 		categoryId,
-		fixed,
+		implementationFixed,
+		discountFixed
 	} = req.body;
 	const { id: createdBy } = req.decoded;
 	try {
@@ -36,7 +37,8 @@ const createDeal = async (req, res) => {
 			minRange,
 			maxRange,
 			createdBy,
-			fixed: fixed || false,
+			implementationFixed: implementationFixed || false,
+			discountFixed: discountFixed || false,
 			categoryId,
 			code: generateCode(),
 		});
@@ -62,7 +64,7 @@ const createDeal = async (req, res) => {
 
 const getDeals = async (req, res) => {
 	const deals = await Deal.findAndCountAll({
-		order: [ [ 'createdAt', 'DESC' ] ],
+		order: [['createdAt', 'DESC']],
 		include: association,
 	});
 	const resData = {
@@ -83,7 +85,8 @@ const updateDeal = async (req, res) => {
 		minRange,
 		maxRange,
 		categoryId,
-		fixed,
+		implementationFixed,
+		discountFixed,
 		implementationCost: impCost,
 		implementationDiscount: impDiscount,
 	} = req.body;
@@ -98,7 +101,8 @@ const updateDeal = async (req, res) => {
 			categoryId: categoryId || deal.dataValues.categoryId,
 			implementationCost: impCost || deal.dataValues.implementationCost,
 			implementationDiscount: impDiscount || deal.dataValues.implementationDiscount,
-			fixed: fixed,
+			implementationFixed: implementationFixed,
+			discountFixed: discountFixed,
 		});
 		return res.status(201).json({
 			status: 201,
@@ -136,13 +140,14 @@ const requestDiscount = async (req, res) => {
 	});
 
 	if (deal) {
-		const { discount: realDiscount, fixed, implementationDiscount: impDiscount, ...filtered } = deal.dataValues;
+		// TODO: done
+		const { discount: realDiscount, implementationFixed, discountFixed, implementationDiscount: impDiscount, ...filtered } = deal.dataValues;
 
-		const givenDiscount = fixed ? realDiscount : getRandomNum(realDiscount / 2, realDiscount);
+		const givenDiscount = discountFixed ? realDiscount : getRandomNum(realDiscount / 2, realDiscount);
 
-		const givenImpDiscount = fixed ? impDiscount : getRandomNum(impDiscount / 2, impDiscount);
+		const givenImpDiscount = implementationFixed ? impDiscount : getRandomNum(impDiscount / 2, impDiscount);
 
-		const resData = { ...filtered, discount: givenDiscount, fixed, implementationDiscount: givenImpDiscount };
+		const resData = { ...filtered, discount: givenDiscount, discountFixed, implementationFixed, implementationDiscount: givenImpDiscount };
 		return res.status(200).json({
 			status: 200,
 			data: resData,

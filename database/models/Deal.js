@@ -34,7 +34,11 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			type: DataTypes.STRING,
 		},
-		fixed: {
+		discountFixed: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		implementationFixed: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},

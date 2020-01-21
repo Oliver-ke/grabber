@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 const { Search } = Input;
 const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
-	const [ showModal, setShowModal ] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const handleEdit = (data) => {
 		editData(data);
 		setShowModal(true);
@@ -68,9 +68,22 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 			key: 'maxRange'
 		},
 		{
-			title: 'Fixed',
-			dataIndex: 'fixed',
-			key: 'fixed',
+			title: 'Fixed Discount',
+			dataIndex: 'discountFixed',
+			key: 'discountFixed',
+			render: (value) => {
+				let color = 'blue';
+				if (value === true) {
+					color = 'red';
+				}
+				value = value ? 'Yes' : 'No';
+				return <span style={{ color: `${color}` }}>{value}</span>;
+			}
+		},
+		{
+			title: 'Fixed Imp',
+			dataIndex: 'implementationFixed',
+			key: 'implementationFixed',
 			render: (value) => {
 				let color = 'blue';
 				if (value === true) {
@@ -118,7 +131,7 @@ const DiscountTable = ({ discount, getDiscount, deleteDiscount, editData }) => {
 			getDiscount();
 		},
 		// eslint disable-next-line
-		[ getDiscount ]
+		[getDiscount]
 	);
 	let { loading, discounts } = discount;
 	if (discounts) {
