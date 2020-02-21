@@ -1,0 +1,48 @@
+<script
+  type="text/javascript"
+  src="https://sandbox.sdk.monnify.com/plugin/monnify.js"
+></script>
+<button onclick="payWithMonnify()">Pay with Monnify</button>
+
+<script type="text/javascript">
+  function payWithMonnify() {
+    MonnifySDK.initialize({
+      amount: 5000,
+      currency: "NGN",
+      reference: "" + Math.floor(Math.random() * 1000000000 + 1),
+      customerFullName: "John Doe",
+      customerEmail: "monnify@monnify.com",
+      customerMobileNumber: "08121281921",
+      apiKey: "MK_TEST_SAF7HR5F3F",
+      contractCode: "4934121693",
+      paymentDescription: "Test Pay",
+      isTestMode: true,
+      metadata: {
+        name: "Damilare",
+        age: 45
+      },
+      incomeSplitConfig: [
+        {
+          subAccountCode: "MFY_SUB_342113621921",
+          feePercentage: 50,
+          splitAmount: 1900,
+          feeBearer: true
+        },
+        {
+          subAccountCode: "MFY_SUB_342113621922",
+          feePercentage: 50,
+          splitAmount: 2100,
+          feeBearer: true
+        }
+      ],
+      onComplete: function(response) {
+        //Implement what happens when transaction is completed.
+        console.log(response);
+      },
+      onClose: function(data) {
+        //Implement what should happen when the modal is closed here
+        console.log(data);
+      }
+    });
+  }
+</script>

@@ -2,9 +2,12 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Result, Spin, Icon } from 'antd';
 import { connect } from 'react-redux';
 
+// this component should now send payment details and server verification
+
+// only get payment notification when this component mounts
 const PaymentNotification = ({ userDiscount }) => {
 	const { savedDiscount } = userDiscount;
-	const [ payMenthod, setPaymethod ] = useState('');
+	const [payMenthod, setPaymethod] = useState('');
 	if (payMenthod === 'online') {
 		window.location.href = savedDiscount.payUrl;
 	}
@@ -13,7 +16,7 @@ const PaymentNotification = ({ userDiscount }) => {
 			setPaymethod(savedDiscount.paymentMethod);
 			console.log(savedDiscount.paymentMethod);
 		},
-		[ savedDiscount.paymentMethod ]
+		[savedDiscount.paymentMethod]
 	);
 	return (
 		<Fragment>
@@ -23,8 +26,8 @@ const PaymentNotification = ({ userDiscount }) => {
 					title="Great, we just sent you an email, check your mail for payment instruction"
 				/>
 			) : (
-				<Spin />
-			)}
+					<Spin />
+				)}
 		</Fragment>
 	);
 };

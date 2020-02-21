@@ -20,7 +20,12 @@
 		"type": "git",
 		"url": "git+https://github.com/Oliver-ke/grabber.git"
 	},
-	"keywords": [ "deal", "nortify", "school", "grabber" ],
+	"keywords": [
+		"deal",
+		"nortify",
+		"school",
+		"grabber"
+	],
 	"author": "azorji kelechi oliver",
 	"license": "MIT",
 	"bugs": {
