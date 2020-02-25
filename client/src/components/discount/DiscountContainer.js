@@ -30,7 +30,7 @@ const steps = [
 	},
 ];
 
-const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSelection }) => {
+const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSelection, paymentDetail }) => {
 	const [ current, setCurrent ] = useState(0);
 	const [ showLockModal, setShowLockModal ] = useState(false);
 	const { usersSelection, savedDiscount } = userDiscount;
@@ -87,7 +87,7 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 			<div>
 				<h2 className="card-header-text">Nortify Discount Grabber</h2>
 			</div>
-			{!savedDiscount.saved ? (
+			{!paymentDetail ? (
 				<Fragment>
 					{current === 2 ? null : (
 						<Steps className="step" current={current}>
@@ -122,5 +122,6 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 
 const mapStateToProps = (state) => ({
 	userDiscount: state.userDiscount,
+	paymentDetail: state.payment.paymentDetail
 });
 export default connect(mapStateToProps, { getDiscount, getUserDiscount, setSelection })(DiscountContainer);

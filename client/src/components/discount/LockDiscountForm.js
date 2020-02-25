@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { saveUserDiscount } from "../../actions/userDiscount";
+import { handlePayment } from "../../actions/paymentActions";
 import { Form, Input, Button, Alert } from "antd";
 import payMonify from "../../util/payMonify";
 
@@ -8,7 +9,8 @@ const LockDiscountForm = ({
   saveUserDiscount,
   closeModal,
   cancel,
-  discount
+  discount,
+  handlePayment
 }) => {
   const { loading, discountDetail, totalLockPrice } = discount;
   const [formInputs, setFormInputs] = useState({
@@ -33,18 +35,12 @@ const LockDiscountForm = ({
     }
     const { id } = discountDetail;
     const paidFor = { ...formInputs, ...totalLockPrice, dealId: id };
-    const response = await payMonify({
-      amount: totalLockPrice.lockOfferPrice,
+    handlePayment({amount: totalLockPrice.lockOfferPrice,
       email,
       name: school,
       phoneNumber: phone,
-      paidFor
-    });
-    console.log(response);
-    // saveUserDiscount(detail);
-    // if (!loading) {
-    // 	closeModal();
-    // }
+      paidFor})
+     return closeModal();
   };
   const formItemLayout = {
     labelCol: {
@@ -114,4 +110,4 @@ const mapStateToProps = state => ({
   discount: state.userDiscount
 });
 
-export default connect(mapStateToProps, { saveUserDiscount })(LockDiscountForm);
+export default connect(mapStateToProps, { saveUserDiscount, handlePayment })(LockDiscountForm);

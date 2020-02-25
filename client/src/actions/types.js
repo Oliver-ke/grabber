@@ -29,3 +29,8 @@ export const GET_LOCKED_OFFERS = 'GET_LOCKED_PRICE';
 export const SET_EDIT_DATA = 'SET_EDIT_DATA';
 
 export const SEARCH_DISCOUNT = 'SEARCH_DEAL';
+
+// handle payments;
+export const PAYMENT_LOADING = 'PAYMENT_START';
+export const PAYMENT_ERROR = 'PAYMENT_ERROR';
+export const PAYMENT_SUCCESS = 'PAYMENT_SUCCESS';

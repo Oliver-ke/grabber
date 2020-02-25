@@ -1,38 +1,32 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { Result, Spin, Icon } from 'antd';
 import { connect } from 'react-redux';
+import {verifyMonifyPayment} from '../../actions/paymentActions';
 
-// this component should now send payment details and server verification
+// run payment verification to server
+// show payment success or payment failure message
 
-// only get payment notification when this component mounts
-const PaymentNotification = ({ userDiscount }) => {
-	const { savedDiscount } = userDiscount;
-	const [payMenthod, setPaymethod] = useState('');
-	if (payMenthod === 'online') {
-		window.location.href = savedDiscount.payUrl;
-	}
+const PaymentNotification = ({payment}) => {
+	const {reference} = payment.paymentDetail;
 	useEffect(
 		() => {
-			setPaymethod(savedDiscount.paymentMethod);
-			console.log(savedDiscount.paymentMethod);
+			verifyMonifyPayment(reference);
 		},
-		[savedDiscount.paymentMethod]
+		[payment]
 	);
 	return (
 		<Fragment>
-			{payMenthod === 'offline' ? (
-				<Result
-					icon={<Icon type="smile" theme="twoTone" />}
-					title="Great, we just sent you an email, check your mail for payment instruction"
-				/>
-			) : (
-					<Spin />
-				)}
+			<Result
+				icon={<Icon type="check-circle" theme="twoTone" />}
+				title="Great, Payment Was success, check your mail for further instructions"
+			/>
+			{/* <Spin /> */}
 		</Fragment>
 	);
 };
 
 const mapStateToProps = (state) => ({
-	userDiscount: state.userDiscount
+	userDiscount: state.userDiscount,
+	payment: state.payment
 });
 export default connect(mapStateToProps, null)(PaymentNotification);

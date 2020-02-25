@@ -43,10 +43,6 @@ export const saveUserDiscount = details => async dispatch => {
   }
 };
 
-export const payMonify = details => async dispatch => {
-  // handle monify payments
-};
-
 // this has to change
 export const confirmPayment = reference => async dispatch => {
   dispatch(setLoading());
