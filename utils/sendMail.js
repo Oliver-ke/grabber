@@ -1,17 +1,17 @@
 const sgMail = require('@sendgrid/mail');
 
-const mail = async msgContent => {
+const mail = async (msgContent) => {
 	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+	const { email, lockOfferPrice, totalPrice } = msgContent;
 	const msg = {
-		to: msgContent.email,
+		to: email,
 		from: 'deals@nortify.com.ng',
 		subject: 'Discount Payment Detail',
-		text: 'Pay with the following details',
+		text: 'Payment Success',
 		html: `<div>
-    <h3>Bank: GTB</h3>
-    <h3>Account: 0045442903</h3>
-    <h3>Account Name: John Doe</h3>
-    <h3>Amount: ₦${msgContent.amount}</h3>
+		<h3>Call 08101967324, for further questions </h3>
+    <h3>You paid: #${lockOfferPrice}</h3>
+    <h3>You Balance: #${totalPrice - lockOfferPrice}</h3>
     </div>`
 	};
 	try {

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const { auth, deal, user, lockDeal, category } = require('./routes');
+const { auth, deal, user, lockDeal, category, payment } = require('./routes');
 const { sequelize } = require('./database/models');
 dotenv.config();
 const app = express();
@@ -23,6 +23,7 @@ app.use('/api/deal', deal);
 app.use('/api/auth', auth);
 app.use('/api/category', category);
 app.use('/api/lockDeal', lockDeal);
+app.use('/api/payment', payment);
 
 // Server static assets if in production
 // Set static folder

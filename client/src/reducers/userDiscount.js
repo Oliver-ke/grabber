@@ -5,7 +5,9 @@ import {
 	SAVE_USER_DISCOUNT,
 	SET_TOTAL_LOCK_PRICE,
 	GET_LOCKED_OFFERS,
-	CONFIRM_PAYMENT
+	CONFIRM_PAYMENT,
+	SAVE_USER_DISCOUNT_ERROR,
+	PURGE_STATE
 } from '../actions/types';
 
 const initialState = {
@@ -17,7 +19,8 @@ const initialState = {
 	lockedOffers: [],
 	totalLockPrice: {},
 	loading: false,
-	confirmPayment: {}
+	confirmPayment: {},
+	error: null
 };
 
 export default (state = initialState, action) => {
@@ -26,7 +29,8 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				discountDetail: action.payload,
-				loading: false
+				loading: false,
+				error: null
 			};
 		case SET_USERS_SELECTION:
 			return {
@@ -37,12 +41,19 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				savedDiscount: { ...action.payload, saved: true }
+				savedDiscount: { ...action.payload, saved: true },
+				error: null
 			};
 		case SET_TOTAL_LOCK_PRICE:
 			return {
 				...state,
 				totalLockPrice: action.payload
+			};
+		case SAVE_USER_DISCOUNT_ERROR:
+			return {
+				...state,
+				error: action.payload,
+				loading: false
 			};
 		case GET_LOCKED_OFFERS:
 			return {
@@ -54,12 +65,18 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				confirmPayment: action.payload,
-				loading: false
+				loading: false,
+				error: null
 			};
 		case USER_DEAL_LOADING:
 			return {
 				...state,
 				loading: true
+			};
+		case PURGE_STATE:
+			return {
+				...state,
+				savedDiscount: { saved: false }
 			};
 		default:
 			return state;

@@ -16,18 +16,18 @@ const steps = [
 	{
 		title: 'Select package',
 		content: <Category />,
-		parentTitle: 'Select a Suitable Package',
+		parentTitle: 'Select a Suitable Package'
 	},
 	{
 		title: 'Choose Range',
 		content: <Range />,
-		parentTitle: 'Select Your Range of Students',
+		parentTitle: 'Select Your Range of Students'
 	},
 	{
 		title: 'Grab Discount',
 		content: <Discount />,
-		parentTitle: 'Your Discount',
-	},
+		parentTitle: 'Your Discount'
+	}
 ];
 
 const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSelection, paymentDetail }) => {
@@ -39,7 +39,7 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 		() => {
 			getDiscount();
 		},
-		[ getDiscount ],
+		[ getDiscount ]
 	);
 	const next = () => {
 		const newCurrent = current + 1;
@@ -63,7 +63,6 @@ const DiscountContainer = ({ userDiscount, getDiscount, getUserDiscount, setSele
 	const lockOfferBtnClick = () => {
 		// trigger show lock modal
 		setShowLockModal(true);
-		message.success('Processing complete!');
 	};
 
 	const onModalClose = () => {

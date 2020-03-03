@@ -1,113 +1,116 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { saveUserDiscount } from "../../actions/userDiscount";
-import { handlePayment } from "../../actions/paymentActions";
-import { Form, Input, Button, Alert } from "antd";
-import payMonify from "../../util/payMonify";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { saveUserDiscount } from '../../actions/userDiscount';
+import { handlePayment } from '../../actions/paymentActions';
+import { Form, Input, Button, Alert } from 'antd';
 
-const LockDiscountForm = ({
-  saveUserDiscount,
-  closeModal,
-  cancel,
-  discount,
-  handlePayment
-}) => {
-  const { loading, discountDetail, totalLockPrice } = discount;
-  const [formInputs, setFormInputs] = useState({
-    email: "",
-    phone: "",
-    school: ""
-  });
+const LockDiscountForm = ({ saveUserDiscount, closeModal, cancel, discount, handlePayment }) => {
+	const { loading, discountDetail, totalLockPrice, error: stateError, savedDiscount } = discount;
+	const [ formInputs, setFormInputs ] = useState({
+		email: '',
+		phone: '',
+		school: ''
+	});
 
-  const [error, setError] = useState("");
-  const handleInput = e => {
-    const { value, name } = e.target;
-    setFormInputs({
-      ...formInputs,
-      [name]: value
-    });
-  };
-  const formSubmit = async e => {
-    e.preventDefault();
-    const { email, phone, school } = formInputs;
-    if (!email || !phone || !school) {
-      return setError("Please fill all available fields");
-    }
-    const { id } = discountDetail;
-    const paidFor = { ...formInputs, ...totalLockPrice, dealId: id };
-    handlePayment({amount: totalLockPrice.lockOfferPrice,
-      email,
-      name: school,
-      phoneNumber: phone,
-      paidFor})
-     return closeModal();
-  };
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 8 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
-  };
+	useEffect(
+		() => {
+			if (stateError) {
+				return setError("You've already locked this offer");
+			}
+			if (savedDiscount.saved === true) {
+				const { id } = discountDetail;
+				const paidFor = { ...formInputs, ...totalLockPrice, dealId: id };
+				const { email, phone, school } = formInputs;
+				handlePayment({
+					amount: totalLockPrice.lockOfferPrice,
+					email,
+					name: school,
+					phoneNumber: phone,
+					paidFor
+				});
+				closeModal();
+			}
+		},
+		[ discount ]
+	);
 
-  return (
-    <Form {...formItemLayout} onSubmit={formSubmit}>
-      {error ? (
-        <Alert
-          message={error}
-          type="error"
-          closable
-          afterClose={() => setError("")}
-        />
-      ) : null}
-      <Form.Item label="Your Email">
-        <Input
-          type="email"
-          onChange={handleInput}
-          value={formInputs.email}
-          name="email"
-          style={{ width: "80%" }}
-          placeholder="email"
-        />
-      </Form.Item>
-      <Form.Item label="Phone">
-        <Input
-          type="number"
-          onChange={handleInput}
-          value={formInputs.phone}
-          name="phone"
-          style={{ width: "80%" }}
-          placeholder="Phone number"
-        />
-      </Form.Item>
-      <Form.Item label="School Name">
-        <Input
-          type="text"
-          onChange={handleInput}
-          value={formInputs.school}
-          name="school"
-          style={{ width: "80%" }}
-          placeholder="school name"
-        />
-      </Form.Item>
-      <hr />
-      <div style={{ textAlign: "right" }}>
-        <Button type="primary" loading={loading} htmlType="submit">
-          Proceed
-        </Button>
-        <Button onClick={cancel} style={{ marginLeft: 8 }}>
-          Cancel
-        </Button>
-      </div>
-    </Form>
-  );
+	const [ error, setError ] = useState('');
+	const handleInput = (e) => {
+		const { value, name } = e.target;
+		setFormInputs({
+			...formInputs,
+			[name]: value
+		});
+	};
+	const formSubmit = async (e) => {
+		e.preventDefault();
+		const { email, phone, school } = formInputs;
+		if (!email || !phone || !school) {
+			return setError('Please fill all available fields');
+		}
+		const { id } = discountDetail;
+		const detail = { ...formInputs, ...totalLockPrice, dealId: id };
+		return saveUserDiscount(detail);
+	};
+	const formItemLayout = {
+		labelCol: {
+			xs: { span: 8 },
+			sm: { span: 8 }
+		},
+		wrapperCol: {
+			xs: { span: 24 },
+			sm: { span: 16 }
+		}
+	};
+
+	return (
+		<Form {...formItemLayout} onSubmit={formSubmit}>
+			{error ? <Alert message={error} type="error" closable afterClose={() => setError('')} /> : null}
+			<Form.Item label="Your Email">
+				<Input
+					type="email"
+					onChange={handleInput}
+					value={formInputs.email}
+					name="email"
+					style={{ width: '80%' }}
+					placeholder="email"
+				/>
+			</Form.Item>
+			<Form.Item label="Phone">
+				<Input
+					type="number"
+					onChange={handleInput}
+					value={formInputs.phone}
+					name="phone"
+					style={{ width: '80%' }}
+					placeholder="Phone number"
+				/>
+			</Form.Item>
+			<Form.Item label="School Name">
+				<Input
+					type="text"
+					onChange={handleInput}
+					value={formInputs.school}
+					name="school"
+					style={{ width: '80%' }}
+					placeholder="school name"
+				/>
+			</Form.Item>
+			<hr />
+			<div style={{ textAlign: 'right' }}>
+				<Button type="primary" loading={loading} htmlType="submit">
+					Proceed
+				</Button>
+				<Button onClick={cancel} style={{ marginLeft: 8 }}>
+					Cancel
+				</Button>
+			</div>
+		</Form>
+	);
 };
 
-const mapStateToProps = state => ({
-  discount: state.userDiscount
+const mapStateToProps = (state) => ({
+	discount: state.userDiscount
 });
 
 export default connect(mapStateToProps, { saveUserDiscount, handlePayment })(LockDiscountForm);

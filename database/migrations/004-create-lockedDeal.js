@@ -32,7 +32,7 @@ module.exports = {
 				defaultValue: false
 			},
 			paymentMethod: {
-				type: Sequelize.ENUM(['online', 'offline']),
+				type: Sequelize.ENUM([ 'online', 'offline', 'pending' ]),
 				allowNull: false
 			},
 			expired: {

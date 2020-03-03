@@ -1,44 +1,43 @@
-const axios = require("axios");
-
-// axios config
-const config = {
-  headers: {
-    authorization: `Bearer ${process.env.PAY_KEY}`,
-    "content-type": "appication/json",
-    "cache-control": "no-cache"
-  }
+const axios = require('axios');
+/**
+ * Get access token using the following procedure
+ * base64Encode(apiKey + ":" + secret)
+ */
+const getAccessToken = async () => {
+	const url = 'https://sandbox.monnify.com/api/v1/auth/login';
+	const key = `${process.env.MONIFY_API_KEY}:${process.env.MONIFY_SECRET_KEY}`;
+	const keyEncode = Buffer.from(key).toString('base64');
+	const loginConfig = {
+		headers: {
+			Authorization: `Basic ${keyEncode}`
+		}
+	};
+	try {
+		const res = await axios.post(url, {}, loginConfig);
+		return res.data.responseBody.accessToken;
+	} catch (error) {
+		return 'Error';
+	}
 };
 
-const initPayment = paymentDetails =>
-  new Promise(async (resolve, reject) => {
-    // Note amount must be in kobo *100;
-    const { email, amount, phone } = paymentDetails;
-    const uri = "https://api.paystack.co/transaction/initialize";
-    const payload = JSON.stringify({ email, amount, phone });
-    try {
-      const {
-        data: { data }
-      } = await axios.post(uri, payload, config);
-      resolve(data);
-    } catch (error) {
-      reject(error);
-    }
-  });
-
-const confirmPayment = reference =>
-  new Promise(async (resolve, reject) => {
-    const uri = `https://api.paystack.co/transaction/verify/${reference}`;
-    try {
-      const {
-        data: { data }
-      } = await axios.get(uri, config);
-      resolve(data);
-    } catch (error) {
-      reject(error);
-    }
-  });
+// monify payment verification
+const verifyMonifyPayment = async (paymentRef) => {
+	const accessToken = await getAccessToken();
+	const monifyConfig = {
+		headers: {
+			Authorization: `Bearer ${accessToken}`
+		}
+	};
+	try {
+		const endpoint = `https://sandbox.monnify.com/api/v2/transactions/${paymentRef}`;
+		const res = await axios.get(endpoint, monifyConfig);
+		return res.data;
+	} catch (error) {
+		return 'Error';
+	}
+};
 
 module.exports = {
-  initPayment,
-  confirmPayment
+	getAccessToken,
+	verifyMonifyPayment
 };

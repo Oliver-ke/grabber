@@ -1,6 +1,6 @@
 const moment = require('moment');
 const { LockedDeal: LockDeal, Deal } = require('../database/models');
-const { sendMail, payment: { initPayment, confirmPayment } } = require('../utils');
+const { sendMail, payment: { verifyMonifyPayment } } = require('../utils');
 
 const association = [
 	{
@@ -11,7 +11,7 @@ const association = [
 ];
 
 const addLockDeal = async (req, res) => {
-	const { email, phone, school, dealId, lockOfferPrice, paymentMethod, totalPrice } = req.body;
+	const { email, phone, school, dealId, lockOfferPrice, totalPrice } = req.body;
 	try {
 		const deal = await Deal.findByPk(dealId);
 		if (deal) {
@@ -21,30 +21,16 @@ const addLockDeal = async (req, res) => {
 				school,
 				lockOfferPrice,
 				totalPrice,
-				paymentMethod,
+				paymentMethod: 'pending',
 				dealId
 			};
 			// verify that email does not exist or is expired
-			const alreadyLocked = await LockDeal.findOne({ where: { email, expired: false } });
+			const alreadyLocked = await LockDeal.findOne({ where: { email, expired: false, paid: true } });
 			if (alreadyLocked) {
 				return res.status(422).json({ status: 422, message: "you've already locked this offer" });
 			}
-			// handle offline payments
-			if (paymentMethod === 'offline') {
-				const expiresAt = moment().add(45, 'days');
-				newLockDeal.expiresAt = expiresAt;
-				const savedDate = await LockDeal.create(newLockDeal);
-				const { error } = await sendMail({ email, amount: lockOfferPrice });
-				if (!error) {
-					return res.status(201).json({ status: 201, data: savedDate });
-				}
-				// add expiration date here
-				return res.status(500).json({ status: 500, message: 'error sending mail' });
-			}
-			const { authorization_url } = await initPayment({ email, amount: lockOfferPrice * 100, phone });
 			const savedData = await LockDeal.create(newLockDeal);
-			const resData = { ...savedData.dataValues, payUrl: authorization_url };
-			return res.status(201).json({ status: 201, data: resData });
+			return res.status(201).json({ status: 201, data: savedData.dataValues });
 		}
 		return res.status(404).json({ status: 404, message: 'Deal does not exist' });
 	} catch (error) {
@@ -57,23 +43,25 @@ const addLockDeal = async (req, res) => {
 const verifyPayment = async (req, res) => {
 	const { reference } = req.params;
 	try {
-		const response = await confirmPayment(reference);
-		if (response && response.status === 'success') {
+		const response = await verifyMonifyPayment(reference);
+		// check status if  its true or false
+		if (response && response.requestSuccessful === true && response.responseMessage === 'success') {
 			// change paid to true
+			const { customer: { email }, metaData: { lockOfferPrice, totalPrice } } = response.responseBody;
 			const lockedDeal = await LockDeal.findOne({
-				where: { email: response.customer.email, paymentMethod: 'online', expired: false }
+				where: { email: email, expired: false }
 			});
-			// set expiry date if not set
+			// // set expiry date and others
 			if (!lockedDeal.expiresAt) {
 				const expiresAt = moment().add(45, 'days');
-				await lockedDeal.update({ paid: true, expiresAt });
-				console.log(lockedDeal.dataValues);
+				await lockedDeal.update({ paid: true, expiresAt, paymentMethod: 'online' });
+				// send mail here
+				await sendMail({ email, lockOfferPrice, totalPrice });
 			}
-			return res.status(200).json({ status: 200, message: 'confirmed' });
+			return res.status(200).json({ status: 200, message: 'confirmed', ...response });
 		}
 		return res.status(500).json({ status: 500, message: 'Server error while confirming payment' });
 	} catch (error) {
-		console.log(error);
 		if (error.code === 'ENOTFOUND') {
 			return res.status(500).json({ status: 500, message: 'No network Connection' });
 		}

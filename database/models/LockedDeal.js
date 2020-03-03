@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		paymentMethod: {
 			allowNull: false,
-			type: DataTypes.ENUM([ 'online', 'offline' ])
+			type: DataTypes.ENUM([ 'online', 'offline', 'pending' ])
 		},
 		expired: {
 			type: DataTypes.BOOLEAN,
