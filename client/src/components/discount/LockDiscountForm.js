@@ -8,6 +8,7 @@ const LockDiscountForm = ({ saveUserDiscount, closeModal, cancel, discount, hand
 	const { loading, discountDetail, totalLockPrice, error: stateError, savedDiscount } = discount;
 	const [ formInputs, setFormInputs ] = useState({
 		email: '',
+		name: '',
 		phone: '',
 		school: ''
 	});
@@ -20,11 +21,11 @@ const LockDiscountForm = ({ saveUserDiscount, closeModal, cancel, discount, hand
 			if (savedDiscount.saved === true) {
 				const { id } = discountDetail;
 				const paidFor = { ...formInputs, ...totalLockPrice, dealId: id };
-				const { email, phone, school } = formInputs;
+				const { email, phone, name } = formInputs;
 				handlePayment({
 					amount: totalLockPrice.lockOfferPrice,
 					email,
-					name: school,
+					name: name,
 					phoneNumber: phone,
 					paidFor
 				});
@@ -66,6 +67,16 @@ const LockDiscountForm = ({ saveUserDiscount, closeModal, cancel, discount, hand
 	return (
 		<Form {...formItemLayout} onSubmit={formSubmit}>
 			{error ? <Alert message={error} type="error" closable afterClose={() => setError('')} /> : null}
+			<Form.Item label="Full Name">
+				<Input
+					type="text"
+					onChange={handleInput}
+					value={formInputs.name}
+					name="name"
+					style={{ width: '80%' }}
+					placeholder="name"
+				/>
+			</Form.Item>
 			<Form.Item label="Your Email">
 				<Input
 					type="email"

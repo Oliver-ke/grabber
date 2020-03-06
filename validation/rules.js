@@ -55,6 +55,7 @@ const getCategoryDeals = [ query('categoryId', 'provide a categoryId').isAlphanu
 const addLockDeal = [
 	body('email', 'please provide a valid email').trim().isEmail().not().isEmpty(),
 	body('school', 'please provide a valid school name').trim().not().isEmpty(),
+	body('name', 'please provide your name').trim().not().isEmpty(),
 	body('totalPrice', 'please provide a totalPrice').isNumeric().not().isEmpty(),
 	body('lockOfferPrice', 'please provide an lockOfferPrice').isNumeric().not().isEmpty(),
 	body('paid', 'please provide a valid paid value').optional().isBoolean().not().isEmpty(),

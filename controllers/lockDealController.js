@@ -11,7 +11,7 @@ const association = [
 ];
 
 const addLockDeal = async (req, res) => {
-	const { email, phone, school, dealId, lockOfferPrice, totalPrice } = req.body;
+	const { email, phone, school, dealId, lockOfferPrice, totalPrice, name } = req.body;
 	try {
 		const deal = await Deal.findByPk(dealId);
 		if (deal) {
@@ -21,6 +21,7 @@ const addLockDeal = async (req, res) => {
 				school,
 				lockOfferPrice,
 				totalPrice,
+				name,
 				paymentMethod: 'pending',
 				dealId
 			};
@@ -47,7 +48,7 @@ const verifyPayment = async (req, res) => {
 		// check status if  its true or false
 		if (response && response.requestSuccessful === true && response.responseMessage === 'success') {
 			// change paid to true
-			const { customer: { email }, metaData: { lockOfferPrice, totalPrice } } = response.responseBody;
+			const { customer: { email }, metaData: { lockOfferPrice, totalPrice, name } } = response.responseBody;
 			const lockedDeal = await LockDeal.findOne({
 				where: { email: email, expired: false }
 			});
@@ -56,7 +57,7 @@ const verifyPayment = async (req, res) => {
 				const expiresAt = moment().add(45, 'days');
 				await lockedDeal.update({ paid: true, expiresAt, paymentMethod: 'online' });
 				// send mail here
-				await sendMail({ email, lockOfferPrice, totalPrice });
+				await sendMail({ email, lockOfferPrice, totalPrice, name });
 			}
 			return res.status(200).json({ status: 200, message: 'confirmed', ...response });
 		}

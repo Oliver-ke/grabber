@@ -1,9 +1,10 @@
 module.exports = {
-	up: queryInterface =>
+	up: (queryInterface) =>
 		queryInterface.bulkInsert('LockedDeals', [
 			{
 				id: 33331,
 				email: 'schmg@gmail.com',
+				name: 'James Bulks',
 				phone: '08124358890',
 				school: 'Holy cross international',
 				totalPrice: 340000,
@@ -19,6 +20,7 @@ module.exports = {
 			{
 				id: 33332,
 				email: 'kalig@gmail.com',
+				name: 'Admains Raffs',
 				phone: '08101967324',
 				school: 'Oscars school of science',
 				totalPrice: 560000,
@@ -30,5 +32,5 @@ module.exports = {
 				updatedAt: '2019-06-08 009:10:38.181+01'
 			}
 		]),
-	down: queryInterface => queryInterface.bulkDelete('LockedDeals', null, {})
+	down: (queryInterface) => queryInterface.bulkDelete('LockedDeals', null, {})
 };
