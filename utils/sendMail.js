@@ -62,7 +62,7 @@ const composeAdminMail = ({ adminEmail, name }) => {
 };
 
 const mail = async (msgContent) => {
-	msgContent.adminEmail = 'kelechioliver96@gmail.com';
+	msgContent.adminEmail = 'holler4eva@gmail.com';
 	const clientMail = composeCustomerMail(msgContent);
 	const adminEmail = composeAdminMail(msgContent);
 	try {
